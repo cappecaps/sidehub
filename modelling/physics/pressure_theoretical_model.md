@@ -111,7 +111,8 @@ From the formula we can infer how the pressure profile changes with different pa
 
 
 :::{note}
-
+:dropdown:
+:open:
 ## Reference atmospheric models
 
 The International Standard Atmosphere (ISA) is a model that describes how the atmospheric parameters change with altitude. It assumes a constant gravitational field, dry air, and it divides the atmosphere in various layers, with different characteristics.
@@ -353,12 +354,14 @@ Our current model already results in a very good estimation of the pressure, esp
 - Spherical Earth, no spin
 - Constant gravitational field
 - Constant atmospheric composition, dry air
-- Empirical lapse rates
+- Standard lapse rates
 
-Let's keep improving our model by removing _some_ of them one by one. The most impactful one is likely dry air: on Earth, air is never completely dry, and some water vapor is mixed with the other gases. The addition of water vapor affects the composition, namely the average molar mass $m$.
+Let's keep improving our model by removing _most_ of them, one by one. The most impactful one is arguably dry air: on Earth, air is never completely dry, and some water vapor is mixed with the other gases. The addition of water vapor affects the composition, namely the average molar mass $m$.
 
 
 :::{note}
+:dropdown:
+:open:
 ### Sea-level pressure reduction
 
 Atmospheric pressure is always reported at the MSL. When a weather station at a certain altitude measures the local pressure, that value is then reduced to the sea level. In other words, the station must estimate the pressure that would be measured if someone digged down to the sea level. This is called **sea-level pressure reduction**, and since no air exists below ground, it is purely hypothetical, so that many assumptions need to be made. For example, how temperature and humidity would vary going down cannot be properly defined.
@@ -382,10 +385,10 @@ Additional refinements can be employed, but they are often empirical and specifi
 The amount of water vapor in the air is usually measured in relative humidity (RH or $\phi$), which is the fraction of the water vapor in the air relative to the "maximum" potential at that temperature. 
 
 
-### From relative humidity
 
 :::{note}
-
+:dropdown:
+:open:
 ### Relative humidity and water vapor pressure
 
 **Relative humidity** $\phi$ is defined as the ratio between the measured partial pressure of water $p_w$ and its equilibrium (saturation) vapor pressure $p_{vap,w}$:
@@ -445,6 +448,8 @@ plt.show()
 ```
 
 :::
+
+### Water content from relative humidity
 
 In order to account for humidity in our model, we need to calculate $f_{H_2O}(h)$, the molar fraction of water at a given altitude, from relative humidity. Given equation {eq}`relative_humidity`:
 
@@ -554,7 +559,7 @@ $$(p_moist)
 Since $(m_d - m_w) > 0$, the exponential term in equation {eq}`p_moist` is greater than one. Humidity thus seems to effectively increase the pressure, which is the opposite of what we would expect! This is indeed not true. The effect of a smaller air molar mass is twofold. First, it reduces the slope of the pressure vertical profile, because less mass "pushes down" the air column. Secondly, a lighter air column produces a smaller pressure at the surface, $p(0)$. If we set $p(0)\equiv p^\circ$, we would be violating the law of conservation of mass. We will return on this topic when we have a better model. 
 
 
-### From dew point 
+### Water content from dew point 
 
 The data avaiable from [atmospheric soundings](wiki:atmospheric_sounding) does not usually provide the relative humidity, but the **dew point** ([](#fig:sounding)). 
 
@@ -565,6 +570,8 @@ Atmospheric sounding chart showing the temperature (red line) and the dew point 
 :::
 
 :::{note} Dew point
+:dropdown:
+:open:
 The <wiki:dew_point> is the temperature the air needs to be cooled to at constant pressure in order to reach a relative humidity of 100\%. 
 
 The vapor pressure of water is the partial pressure of water $p_w$ in the air, and is given by
@@ -681,7 +688,8 @@ where we used the power series. We call the term $\left(1+h/R\right)^{-2}$ the *
 We now want to describe Earth's shape more accurately than using a sphere. Our model will then also include the geographic latitude $\varphi$ (distinct from $\phi$ for relative humidity). We will use the World Geodetic System 1984 (WGS 84), which is used by the GPS system and suggested by the <wiki:International_Civil_Aviation_Organization>. 
 
 :::{note}
-
+:dropdown:
+:open:
 ### World Geodetic System 1984
 
 World Geodetic System 1984 describes Earth as a reference ellipsoid with the following parameters
@@ -786,7 +794,7 @@ plt.show()
 
 ## The thermosphere
 
-The thermosphere is the outer layer of the atmosphere, above 80 km of altitude. The name stems from the high temperatures that are reached due to the ionizing radiation from the sun. 
+The thermosphere is the outer layer of the atmosphere, above 80 km of altitude. The name stems from the high temperatures that are reached due to the ionizing radiation from the sun. Here, photochemical processes dominate and determine the properties of this layer.
 
 ### Temperature of the thermosphere
 
