@@ -74,34 +74,34 @@ $$ (pressure_gravfield)
 where $F$ the weight of the gas column above $h$. The pressure of the column can also be calculated as the integral along the vertical direction $z$ of the mass density $\rho(z)$ of the gas, times the gravitational acceleration $g(z)$:
 
 $$
-p(h) = \int_h^{+\infty}g(z)\rho(z) dz  = \int_h^{+\infty}g(z)m_0(z)n(z) dz 
+p(h) = \int_h^{+\infty}g(z)\rho(z) dz  = \int_h^{+\infty}g(z)m(z)n(z) dz 
 $$(pressure_h)
 
-where we expressed the mass density $\rho$ as the product of the average mass of the gas particle, $m_0$, and the numerical density, $n$. We can rearrange and convert the equation in its differential form, knowing that $n(+\infty)=0$:
+where we expressed the mass density $\rho$ as the product of the average mass of the gas particle, $m$, and the numerical density, $n$. We can rearrange and convert the equation in its differential form, knowing that $n(+\infty)=0$:
 
 $$
-\dfrac{d}{dh}p(h)=-g(h)\,m_0(h)n(h) = -g(h)\,m_0(h)\dfrac{p(h)}{k_BT(h)}
+\dfrac{d}{dh}p(h)=-g(h)\,m(h)n(h) = -g(h)\,m(h)\dfrac{p(h)}{k_BT(h)}
 $$(diff_pressure)
 
 Where we used equation {eq}`idealgas` to express the numerical density in terms of density and temperature. Note that equation {eq}`diff_pressure` only depends on the altitude $h$ and its proximity (the derivative), and not on the whole gas column that sits above. This mathematical step permits us to reach for a solution, but at the cost of not being able to find the absolute value of the pressure. Rearranging equation {eq}`diff_pressure`, we have:
 
 $$
-\dfrac{\dfrac{d}{dh}p(h)}{p(h)}=-\dfrac{1}{k_B}\dfrac{g(h)m_0(h)}{T(h)}
+\dfrac{\dfrac{d}{dh}p(h)}{p(h)}=-\dfrac{1}{k_B}\dfrac{g(h)m(h)}{T(h)}
 $$
 
 By integrating in $dz$ from $0$ to $h$ we eventually obtain the general solution of how the pressure varies with the altitude:
 
 $$
-p(h)=p(0)\exp\bigg[-\dfrac{1}{k_B}\int_0^h\dfrac{g(z)m_0(z)}{T(z)}dz\bigg]
+p(h)=p(0)\exp\bigg[-\dfrac{1}{k_B}\int_0^h\dfrac{g(z)m(z)}{T(z)}dz\bigg]
 $$(general_formula)
 
-Interestingly, to compute the pressure at a certain altitude $h$ we just need to know how the integrand varies below that point, and not above. This is because the formula assumes we know $p(0)$, the pressure at $h=0$, so that the information of the air column above is implicitly contained there. If we choose $h=0$ to be the sea level, then $p(0)$ is the barometric pressure, which in standard conditions is $1013.25\ \mathrm{hPa}$. In reality, the sea-level pressure varies continuously and it must be measured. 
+Interestingly, to compute the pressure at a certain altitude $h$ we just need to know how the integrand varies below that point, and not above. This is because the formula assumes we know $p(0)$, the pressure at $h=0$, so that the information of the air column above is implicitly contained there. If we choose $h=0$ to be the sea level, then $p(0)$ is the barometric pressure, or mean sea level pressure $p_0 = 1013.25\ \mathrm{hPa}$.
 
 ## The barometric formula
-Let’s consider the simplest case to solve equation {eq}`general_formula`: we assume that are all variables inside the integral, i.e. composition, temperature, and gravity, are constants with altitude. Such approximation is valid close to the Earth's surface level. We then obtain:
+Let’s consider the simplest case to solve equation {eq}`general_formula`: we assume that are all variables inside the integral, i.e. composition, temperature, and gravity, are constants with altitude. We denote such constants with a nought. The approximation is valid close to the Earth's surface level. We then obtain:
 
 $$
-p_{bar}(h)=p(0)\exp\bigg[-\dfrac{m_0g_0h}{k_BT}\bigg]
+p_{bar}(h)=p_0\exp\bigg[-\dfrac{m_0g_0h}{k_BT}\bigg]
 $$(barometric_formula)
 
 We recognize $m_0g_0h$ as the potential energy of a single gas particle, and $k_BT$ as its thermal energy. Wait, what? Equation {eq}`barometric_formula` is called the **barometric formula**. The exponential term is the Boltzmann factor ($e^{-E/k_BT}$), which, in a canonical ensemble (NVT, our case), represents the probability of the system to be in a state with energy $E$. In our case, $E$ is the potential energy of a mass in a uniform gravitational field, and the Boltzmann factor represents the probability of a particle to be at that altitude. Macroscopically, this becomes the actual pressure of the gas.
@@ -238,15 +238,26 @@ According to the [NRLMSIS empirical model](https://swx-trec.com/msis/?lz=N4Igtg9
 
 :::
 
+Our current model already results in a very good estimation of the pressure, especially close to the surface. So far, we applied the following approximations:
+- Constant temperature
+- Dry air
+- Constant atmospheric composition
+- Spherical Earth, no spin
+- Constant gravitational field
+- Ideal gas law
+- Zero net mass flux (no wind)
+
+Let's keep improving our model by removing all of them, one by one, except the last one. 
+
 
 ## Temperature variation
 
 Let's start from the barometric formula {eq}`barometric_formula` and remove approximations one by one to finally arrive at the general formula {eq}`general_formula`. First, we introduce the empirical lapse rates that we learned above. We thus leave only the temperature term in the integral:
 
 $$
-p_{dry}(h)=p(0)\exp\bigg[-\dfrac{g_0m_d}{R}\int_0^h\dfrac{1}{T(z)}dz\bigg]
+p_{dry}(h)=p_0\exp\bigg[-\dfrac{g_0m_d}{R}\int_0^h\dfrac{1}{T(z)}dz\bigg]
 $$(with_lapse)
-Where we used the average molar mass of dry air $m_d$ and the gas constant $R$ instead of $m_0$ and $k_B$.
+Where $m_d$ is the average molar mass of dry air, and $R$ is the gas constant $R$. We used the relation $m_0/k_B = m_d/R$.
 Now the temperature can be written as the general expression:
 
 $$
@@ -348,15 +359,6 @@ ax2.legend(loc=(0.55,0.40))
 plt.show()
 ```
 
-Our current model already results in a very good estimation of the pressure, especially close to the surface. As a recap, our model has so far been built within the following approximations:
-- Zero net mass flux (no wind)
-- Ideal gas law
-- Spherical Earth, no spin
-- Constant gravitational field
-- Constant atmospheric composition, dry air
-- Standard lapse rates
-
-Let's keep improving our model by removing _most_ of them, one by one. The most impactful one is arguably dry air: on Earth, air is never completely dry, and some water vapor is mixed with the other gases. The addition of water vapor affects the composition, namely the average molar mass $m$.
 
 
 :::{note}
@@ -382,8 +384,7 @@ Additional refinements can be employed, but they are often empirical and specifi
 
 
 ## Humidity
-The amount of water vapor in the air is usually measured in relative humidity (RH or $\phi$), which is the fraction of the water vapor in the air relative to the "maximum" potential at that temperature. 
-
+On Earth, air is never completely dry, and some water vapor is mixed with the other gases. The addition of water vapor affects the composition, namely the average molar mass $m$. The amount of water vapor in the air is usually measured in relative humidity (RH or $\phi$), which is the fraction of the water vapor in the air relative to the "maximum" potential at that temperature. 
 
 
 :::{note}
@@ -474,7 +475,7 @@ $$
 \begin{cases}
 f_{H_2O}(h) \approx  \varphi(h) \cdot \dfrac{p_{vap,w}(T(h))}{p_{dry}(h)} \\[15pt]
 p_{vap,w}(T(h)) = 610.78\cdot e^{17.27(T(h)+273.15)/(T(h)+35.85)} \\[10pt]
-p_{dry}(h) = p(0)e^{-g_0m_d/R\int_0^{h}dz/T(z)}
+p_{dry}(h) = p_0e^{-g_0m_d/R\int_0^{h}dz/T(z)}
 \end{cases}
 $$(water_molar_frac_dry)
 
@@ -544,7 +545,7 @@ plt.show()
 We can finally reach an expression for the atmospheric pressure with moist air
 
 $$
-p_{moist}(h)= p(0)\exp\bigg[-\dfrac{g_0}{R}\int_0^h\dfrac{m_m(z)}{T(z)}dz\bigg]
+p_{moist}(h)= p_0\exp\bigg[-\dfrac{g_0}{R}\int_0^h\dfrac{m_m(z)}{T(z)}dz\bigg]
 $$
 
 Notice that $m_m(h)$ can be split into a $m_d$ term, and a term that depends on $z$ (equation {eq}`moist_molar_mass`). To learn the effect of water vapor on the atmospheric pressure, we can split the integral into two terms, and find back the expression for $p_{dry}(h)$, equation {eq}`with_lapse`:
@@ -556,7 +557,7 @@ p_{moist}(h) &= p_{dry}(h)\cdot\exp\bigg[\dfrac{g_0}{R}(m_d - m_w)\int_0^h \dfra
 \end{align}
 $$(p_moist)
 
-Since $(m_d - m_w) > 0$, the exponential term in equation {eq}`p_moist` is greater than one. Humidity thus seems to effectively increase the pressure, which is the opposite of what we would expect! This is indeed not true. The effect of a smaller air molar mass is twofold. First, it reduces the slope of the pressure vertical profile, because less mass "pushes down" the air column. Secondly, a lighter air column produces a smaller pressure at the surface, $p(0)$. If we set $p(0)\equiv p^\circ$, we would be violating the law of conservation of mass. We will return on this topic when we have a better model. 
+Since $(m_d - m_w) > 0$, the exponential term in equation {eq}`p_moist` is greater than one. Humidity thus seems to effectively increase the pressure, which is the opposite of what we would expect! This is indeed not true. The effect of a smaller air molar mass is twofold. First, it reduces the slope of the pressure vertical profile, because less mass "pushes down" the air column. Secondly, a lighter air column produces a smaller pressure at the surface, $p_0$. If we set $p_0\equiv p^\circ$, we would be violating the law of conservation of mass. We will return on this topic when we have a better model. 
 
 
 ### Water content from dew point 
@@ -796,7 +797,7 @@ plt.show()
 
 The thermosphere is the outer layer of the atmosphere, above 80 km of altitude. The name stems from the high temperatures that are reached due to the ionizing radiation from the sun. Here, photochemical processes dominate and determine the properties of this layer.
 
-### Temperature of the thermosphere
+### Temperatures
 
 The ISA model does not include the thermosphere, but reaches a maximum altitude of 86 km, where the temperature is 186.946 K. The data for the thermosphere is provided by the [NRLMSIS empirical model](https://swx-trec.com/msis/). The temperature profile of the two models combined is shown in [](#fig:thermo-T-altitude), where I extended the constant temperature of the stratopause (186.946 K) up to 107.41 km, and used an exponential regression againsts the NRLMSIS data (see red line). The empirical fitting gives the function:
 
@@ -853,7 +854,7 @@ def ISA_temperature_1000km(h,T_surf=None,L0=None):
 
 ```
 
-### Composition in the thermosphere
+### Chemical composition 
 
 The value that we calculated from [](tab:composition) refers to the global average of the atmospheric composition. We are now interested in how such composition changes with altitude. We know that turbulence and diffusion make the atmospheric composition constant up to 85 km ([](#fig:composition-altitude)). The vertical profile of carbon dioxide, one of the heaviest molecules in the air, starts decreasing from an altitude of 60 km ([](#fig:CO2-altitude)). 
 
@@ -906,6 +907,18 @@ def air_avg_molar_mass(h,RH):
     else:
         return m_dry * np.exp(-0.002*(h-85))
 ```
+
+## Real gases
+
+Let's get rid of the ideal gas approximation as well, and we will have the most perfect model ever. To do that, we need to go back to the start and redo the whole procedure to obtain a general expression of how pressure varies with altitude. 
+
+:::{note} 
+:dropdown:
+:open:
+### World Geodetic System 1984
+
+
+:::
 
 
 ## Pressure at sea level
@@ -988,7 +1001,7 @@ We can indeed see that the effect of water vapor is small, and the two pressure 
 We thus have built the best model we can concieve for atmospheric model. If we allow temperature and humidity as well to change with latitude, we can write
 
 $$
-p(h,\phi)=p(0)\exp\bigg[-\dfrac{1}{R}\int_0^h\dfrac{g(z,\phi)m_m(z,\phi)}{T(z,\phi)}dz\bigg]
+p(h,\phi)=p_0\exp\bigg[-\dfrac{1}{R}\int_0^h\dfrac{g(z,\phi)m_m(z,\phi)}{T(z,\phi)}dz\bigg]
 $$
 
 Our python function will then include the recently defined `g_WGS84_altitude`, `air_avg_molar_mass`, and `ISA_temperature_1000km` functions to evaluate the integral. We don't need to include our recent enhancements of the model in the calculation of $p_{dry}$, since that is needed only to obtain $f_{H_2O}$.
