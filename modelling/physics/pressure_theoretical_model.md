@@ -1071,6 +1071,10 @@ $$
 where we explicitated $p(h,\phi)$. To calculate $M_{atm}$ thus requires to evaluate three integrals. It may make your laptop hot.
 
 
+## Appendix A: Real gases
+
+%Virial theorem up to second order
+
 
 
 ## Altitude from pressure
