@@ -910,15 +910,61 @@ def air_avg_molar_mass(h,RH):
 
 ## Real gases
 
-Let's get rid of the ideal gas approximation as well, and we will have the most perfect model ever. To do that, we need to go back to the start and redo the whole procedure to obtain a general expression of how pressure varies with altitude. 
+Let's get rid of the ideal gas approximation as well, and we will have the most accurate model ever. Ok, just kidding. We can however see how the description of non-ideality modifies the altitude profile. To do that, we need to go back to the start and redo the whole procedure to obtain a general expression of how pressure varies with altitude. 
 
 :::{note} 
 :dropdown:
 :open:
-### World Geodetic System 1984
+### Equation of state
 
+Real gases are modelled taking into account their finite size and the intermolecular interactions. The simplest description is the **van der Waals model**, which considers gas molecules as hard spheres and interacting according to a Sutherland potential:
+
+$$
+p = \dfrac{nRT}{1-nb} - an^2
+$$
+
+where $n$ is the molar density, following the notation we used here. $a$ and $b$ are two empirical parameters, determined for each individual gas. $b$ measures the molar volume of the gas particles, whereas $a$ describes the (attractive) short-range interactions. Another popular equation is the **Redlich–Kwong equation of state**, which, again expressed in terms of molar density, has the form:
+
+$$
+p = \dfrac{nRT}{1-nb} - \dfrac{an^2}{\sqrt{T}(1+nb)}
+$$
+
+Note that $a$ and $b$, although they describe the same properties, are not the same in the two equations. 
 
 :::
+
+The Redlich–Kwong (RK) equation is generally more accurate than the van der Waals model, because of the modified second term. Although it hidden, both are cubic equations in the molar density. Try to isolate $n$ and you'll see. A cubic term would be however very unconvinient, because we need to solve a differential equation, eq. {eq}`diff_pressure`. Thus, we use the virial expansion:
+
+$$
+p = nRT \left(A + B(T)n^2 + C(T)n^3 + ...\right)
+$$
+
+where $B(T)$, $C(T)$, etc., are temperature dependent constants. $A$ is equal to 1, since linearity is the ideal gas limit, $B(T)$ describes two-body interactions, $C(T)$ depends on both 2- and non additive 3-body interactions, and so on. We are going to cast the RK equation into the virial form and find the coefficient $B(T)$, since we want to stop at the second order. We just need to expand the RK equation around $n=0$:
+
+$$
+\begin{align}
+p_{RK} &\approx p_{RK}(n=0) + n\bigg(\dfrac{d}{dn}p_{RK} \bigg)_{n=0} + \dfrac{1}{2}n^2 \bigg(\dfrac{d^2}{d^2n}p_{RK} \bigg)_{n=0}  \\
+       &\equiv nRT \left(A + B(T)n^2\right)
+\end{align}
+$$
+
+After some trained monkey level methmatical steps, we obtain:
+
+$$
+B(T) = RTb-\dfrac{a}{\sqrt{T}}
+$$
+
+where $a$ and $b$, I remind, are the RK constants. So that we have a quadratic expression of the pressure with respect to the molar density:
+
+$$
+p_{RK}(n) \approx cRT + \left( RTb-\dfrac{a}{\sqrt{T}} \right)c^2
+$$
+
+We can now plug it into equation {eq}`diff_pressure`:
+
+$$
+\dfrac{d}{dh}p(h)=-g(h)\,m(h)c(h) = -g(h)\,m(h)\dfrac{p(h)}{k_BT(h)} - g(h)\,m(h)\left( RTb-\dfrac{a}{\sqrt{T}} \right)n^2
+$$(diff_pressure_real)
 
 
 ## Pressure at sea level
