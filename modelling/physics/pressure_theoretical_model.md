@@ -59,16 +59,19 @@ The atmosphere is a mass of air that is gravitationally bound to a planet. On Ea
 (heading-barometric-formula)=
 ## Atmospheric pressure at equilibrium
 
-The development of the our model necessarily starts with a description of the gas molecules. And what's a better start than the ideal gas law? This approximation actually works well with the Earth’s atmosphere, since it has sufficiently low densities and high temperatures. The pressure is given by
+The development of the our model necessarily starts with a description of the gas molecules. And what's a better start than the ideal gas law? This approximation actually works well with the Earth’s atmosphere, since it has sufficiently low densities and high temperatures. The equation of state of ideal gases is given by
 
 $$
     p=nk_BT
 $$ (idealgas)
 
-where $n$ the numerical density of the gas, and $T$ its temperature. To model Earth’s atmosphere, we imagine an infinitely high column of gas subjected to Earth's gravitational field. We assume for now that Earth is spherically symmetric. We also assume that the mass of the atmosphere is negligible, so that there is no gravitational self-interaction, which would make the problem not analytically solvable. Within these assumptions, the pressure of the gas at a certain altitude $h$ must be equivalent to the pressure exerted by the column of gas above it, due to the gravitational field, i.e.:
+where $n$ the numerical density of the gas, and $T$ its temperature. To model Earth’s atmosphere, we imagine an infinitely high column of gas subjected to Earth's gravitational field. We assume for now that Earth is spherically symmetric. We also assume that the mass of the atmosphere is negligible, so that there is no gravitational self-interaction, which would make the problem not analytically solvable. Within these assumptions, the pressure of the gas at a certain altitude $h$ must be equivalent to the pressure exerted by the column of gas above it, due to the gravitational field. We thus have two expression for the pressure:
 
 $$
-    nk_BT(h) = p(h)=\dfrac{F(h)}{A}
+\begin{cases}
+    p(h) &= n(h)k_BT(h) \quad\mathrm{equation\ of\ state}\\[10pt]
+    p(h) &= \dfrac{F(h)}{A}\quad\mathrm{pressure\ of\ air\ column}
+\end{cases}
 $$ (pressure_gravfield)
 
 where $F$ the weight of the gas column above $h$. The pressure of the column can also be calculated as the integral along the vertical direction $z$ of the mass density $\rho(z)$ of the gas, times the gravitational acceleration $g(z)$:
@@ -199,7 +202,7 @@ This, however, results from the crude approximation that the additional carbon d
 | other | traces | - |
 | **total** | 100.000% | 28.9656 |
 ```
-Which gives an average molar mass for dry air $m_d = 28.9656\ \mathrm{g/mol}$. The value is higher compared to $28.9647\ \mathrm{g/mol}$ encountered online, obtained from a lower level of atmospheric $\mathrm{CO_2}$ of 332 ppm. However, my calculation might be too rough, or blatantly wrong; I'm not too sure. See the [Scripps FAQ page](https://scrippso2.ucsd.edu/faq.html) for additional information.
+Which gives an average molar mass for dry air $M_d = 28.9656\ \mathrm{g/mol}$. The value is higher compared to $28.9647\ \mathrm{g/mol}$ encountered online, obtained from a lower level of atmospheric $\mathrm{CO_2}$ of 332 ppm. However, my calculation might be too rough, or blatantly wrong; I'm not too sure. See the [Scripps FAQ page](https://scrippso2.ucsd.edu/faq.html) for additional information.
 
 Of course, the atmosphere is never dry. Water vapor makes circa 0.25\% of the atmospheric mass (i.e. 0.40\% by volume) and its local concentration ranges within 0-4%. The molar fractions, including humidity, are simply given by
 
@@ -255,9 +258,9 @@ Let's keep improving our model by removing all of them, one by one, except the l
 Let's start from the barometric formula {eq}`barometric_formula` and remove approximations one by one to finally arrive at the general formula {eq}`general_formula`. First, we introduce the empirical lapse rates that we learned above. We thus leave only the temperature term in the integral:
 
 $$
-p_{dry}(h)=p_0\exp\bigg[-\dfrac{g_0m_d}{R}\int_0^h\dfrac{1}{T(z)}dz\bigg]
+p_{dry}(h)=p_0\exp\bigg[-\dfrac{g_0M_d}{R}\int_0^h\dfrac{1}{T(z)}dz\bigg]
 $$(with_lapse)
-Where $m_d$ is the average molar mass of dry air, and $R$ is the gas constant $R$. We used the relation $m_0/k_B = m_d/R$.
+Where $M_d$ is the average molar mass of dry air, and $R$ is the gas constant $R$. We used the relation $m_0/k_B = M_d/R$.
 Now the temperature can be written as the general expression:
 
 $$
@@ -277,8 +280,8 @@ and define the global variables that we're going to use across this article
 ```{code-cell} ipython
     R = 8.31446  # Specific gas constant for dry air in J/(mol·K)
     g0 = 9.80665  # Standard gravity in m/s^2
-    m_dry = 28.9656e-3  # Molar mass of air in kg/mol
-    m_water = 18.01528e-3  # Molar mass of water in kg/mol
+    M_dry = 28.9656e-3  # Molar mass of air in kg/mol
+    M_water = 18.01528e-3  # Molar mass of water in kg/mol
     T0 = 288.15  # MSL standard temperature in Kelvin
     p0 = 101325  # MSL standard atmospheric pressure in Pa
 ```
@@ -326,13 +329,13 @@ We can now see how the lapse rates affect the pressure profile.
 
 ```{code-cell} ipython
 def pressure_barometric(h):
-    pressure = p0 * np.exp(-m_dry * g0 * h * 1000 / (R * T0))
+    pressure = p0 * np.exp(-M_dry * g0 * h * 1000 / (R * T0))
 
     return pressure
 
 def pressure_dry(h):
     integral, err = quad(lambda h: 1 / ISA_temperature(h), 0, h, limit=100, points=[0, 11, 20, 32, 47, 51, 71, 84.852])
-    pressure = p0 * np.exp(-m_dry * g0 / R * 1000 * integral )
+    pressure = p0 * np.exp(-M_dry * g0 / R * 1000 * integral )
 
     return pressure
 ```
@@ -371,10 +374,10 @@ Atmospheric pressure is always reported at the MSL. When a weather station at a 
 The sea-level pressure reduction is carried out by means of the <wiki:hypsometric_equation>:
 
 $$
-p_{MSL} = p_{obs}\cdot \exp\bigg[\frac{m_mg_0h}{R\overline{T}}\bigg]
+p_{MSL} = p_{obs}\cdot \exp\bigg[\frac{M_mg_0h}{R\overline{T}}\bigg]
 $$
 
-where $h$ is the altitude in which the pressure $p_{obs}$ is measured, $p_{MSL}$ is the pressure at the MSL, and $\overline{T}$ is the mean temperature of the (moist) air with molar mass $m_m$ (I omitted to explain the <wiki:virtual_temperature>, but the formula is equivalent). The hypsometric equation is basically the barometric formula (equation {eq}`barometric_formula`), but with an average temperature across the vertical distance. The average temperature can simply be computed using the standard lapse rate $\Gamma$, and a 12-hour average surface temperature, an attempt to exclude the effect of the irradiation of surface of the Earth:
+where $h$ is the altitude in which the pressure $p_{obs}$ is measured, $p_{MSL}$ is the pressure at the MSL, and $\overline{T}$ is the mean temperature of the (moist) air with molar mass $M_m$ (I omitted to explain the <wiki:virtual_temperature>, but the formula is equivalent). The hypsometric equation is basically the barometric formula (equation {eq}`barometric_formula`), but with an average temperature across the vertical distance. The average temperature can simply be computed using the standard lapse rate $\Gamma$, and a 12-hour average surface temperature, an attempt to exclude the effect of the irradiation of surface of the Earth:
 $$
     \overline{T} \approx \dfrac{T_{obs}(t) + T_{obs}(t-12h)}{2} - \Gamma \cdot \dfrac{h}{2}
 $$
@@ -458,24 +461,24 @@ $$
 f_{H_2O}(h) = \dfrac{p_w(h)}{p(h)} = \dfrac{\varphi(h) \cdot p_{vap,w}(T(h))}{p(h)} 
 $$(water_molar_frac)
 
-with $p(h)$ the atmospheric pressure. The average mass of a mole of humid air $m_{m}$ (subscript "m" from moist) then includes the molar mass of water $m_w$:
+with $p(h)$ the atmospheric pressure. The average mass of a mole of humid air $m_{m}$ (subscript "m" from moist) then includes the molar mass of water $M_w$:
 
 $$
 \begin{align}
-m_m(h) &= m_d\big( 1 - f_{H_2O}(h) \big) + m_w f_{H_2O}(h) \\[5pt]
-         &=  m_d  - \left(m_d - m_w\right) f_{H_2O}(h)
+M_m(h) &= M_d\big( 1 - f_{H_2O}(h) \big) + M_w f_{H_2O}(h) \\[5pt]
+         &=  M_d  - \left(M_d - M_w\right) f_{H_2O}(h)
 \end{align}
 $$(moist_molar_mass)
 
 Water has a smaller mass compared to the other major species in the air, therefore humidity reduces the average molar mass of a parcel of air, and makes the surface pressure smaller.
 
-Notice from {eq}`water_molar_frac` that the molar fraction of water, needed to compute the average molar mass of moist air $m_m$, depends on the atmospheric pressure itself, which is our sought variable. A solution might be use a "first-order" dry air pressure profile $p_{dry}(h)$ from the (equation {eq}`with_lapse`) instead of the real $p(h)$. 
+Notice from {eq}`water_molar_frac` that the molar fraction of water, needed to compute the average molar mass of moist air $M_m$, depends on the atmospheric pressure itself, which is our sought variable. A solution might be use a "first-order" dry air pressure profile $p_{dry}(h)$ from the (equation {eq}`with_lapse`) instead of the real $p(h)$. 
 
 $$
 \begin{cases}
 f_{H_2O}(h) \approx  \varphi(h) \cdot \dfrac{p_{vap,w}(T(h))}{p_{dry}(h)} \\[15pt]
 p_{vap,w}(T(h)) = 610.78\cdot e^{17.27(T(h)+273.15)/(T(h)+35.85)} \\[10pt]
-p_{dry}(h) = p_0e^{-g_0m_d/R\int_0^{h}dz/T(z)}
+p_{dry}(h) = p_0e^{-g_0M_d/R\int_0^{h}dz/T(z)}
 \end{cases}
 $$(water_molar_frac_dry)
 
@@ -545,19 +548,19 @@ plt.show()
 We can finally reach an expression for the atmospheric pressure with moist air
 
 $$
-p_{moist}(h)= p_0\exp\bigg[-\dfrac{g_0}{R}\int_0^h\dfrac{m_m(z)}{T(z)}dz\bigg]
+p_{moist}(h)= p_0\exp\bigg[-\dfrac{g_0}{R}\int_0^h\dfrac{M_m(z)}{T(z)}dz\bigg]
 $$
 
-Notice that $m_m(h)$ can be split into a $m_d$ term, and a term that depends on $z$ (equation {eq}`moist_molar_mass`). To learn the effect of water vapor on the atmospheric pressure, we can split the integral into two terms, and find back the expression for $p_{dry}(h)$, equation {eq}`with_lapse`:
+Notice that $M_m(h)$ can be split into a $M_d$ term, and a term that depends on $z$ (equation {eq}`moist_molar_mass`). To learn the effect of water vapor on the atmospheric pressure, we can split the integral into two terms, and find back the expression for $p_{dry}(h)$, equation {eq}`with_lapse`:
 
 $$
 \begin{align}
-p_{moist}(h) &= p_{dry}(h)\cdot\exp\bigg[\dfrac{g_0}{R}(m_d - m_w)\int_0^h \dfrac{f_{H_2O}(z)}{T(z)}dz\bigg] \\[10pt]
-             &\approx p_{dry}(h) \cdot \exp\bigg[\dfrac{g_0}{R}(m_d - m_w)\int_0^h \varphi(z) \dfrac{p_{vap,w}(z)}{p_{dry}(z)T(z)}dz\bigg]
+p_{moist}(h) &= p_{dry}(h)\cdot\exp\bigg[\dfrac{g_0}{R}(M_d - M_w)\int_0^h \dfrac{f_{H_2O}(z)}{T(z)}dz\bigg] \\[10pt]
+             &\approx p_{dry}(h) \cdot \exp\bigg[\dfrac{g_0}{R}(M_d - M_w)\int_0^h \varphi(z) \dfrac{p_{vap,w}(z)}{p_{dry}(z)T(z)}dz\bigg]
 \end{align}
 $$(p_moist)
 
-Since $(m_d - m_w) > 0$, the exponential term in equation {eq}`p_moist` is greater than one. Humidity thus seems to effectively increase the pressure, which is the opposite of what we would expect! This is indeed not true. The effect of a smaller air molar mass is twofold. First, it reduces the slope of the pressure vertical profile, because less mass "pushes down" the air column. Secondly, a lighter air column produces a smaller pressure at the surface, $p_0$. If we set $p_0\equiv p^\circ$, we would be violating the law of conservation of mass. We will return on this topic when we have a better model. 
+Since $(M_d - M_w) > 0$, the exponential term in equation {eq}`p_moist` is greater than one. Humidity thus seems to effectively increase the pressure, which is the opposite of what we would expect! This is indeed not true. The effect of a smaller air molar mass is twofold. First, it reduces the slope of the pressure vertical profile, because less mass "pushes down" the air column. Secondly, a lighter air column produces a smaller pressure at the surface, $p_0$. If we set $p_0\equiv p^\circ$, we would be violating the law of conservation of mass. We will return on this topic when we have a better model. 
 
 
 ### Water content from dew point 
@@ -620,7 +623,7 @@ $$
 
 Clouds are aerosols of liquid droplets or crystals, which are mainly water. They form when the relative humidity reaches 100\%, or, equivalently, when the (dry-bulb) temperature reaches the dew point. The amount of water in clouds is measured by the <wiki:liquid_water_content> (LWC), which depends on the type of the cloud. Contrary to what one (me) might expect, only a tiny fraction of the cloud volume is occupied by liquid water. Typical LWC ranges within 0.03-0.45 g/m{sup}`3`, i.e. grams of liquid water per cubic meter of air, up to 3.0 g/m{sup}`3` in the fearsome cumulonimbus clouds. The specific mass $\gamma_{air,dry}$ of dry air is given by
 $$
-\gamma_{air,dry} = \dfrac{m_d\,p}{RT}
+\gamma_{air,dry} = \dfrac{M_d\,p}{RT}
 $$
 At MSL, the weight of one cubic meter of dry air is 1.2 kg, which is much larger than the typical LWC. Even at the limit of the troposhere (~11 km,roughly the upper limit of clouds), where the pressure is ~230 hPa and the temperature is -56.5°C, a cubic meter of air weigths circa 360 grams. Thus, the mass fraction $w_{H_2O,clouds}$ of liquid water in clouds is at most 1\%, with 0.01-0.1\% a typical range:
 
@@ -628,10 +631,10 @@ $$
 w_{H_2O,clouds} = \dfrac{LWC}{\gamma_{air,dry}} \sim 0.01\%-1\%
 $$
 
-Since the air in clouds is likely saturated in water vapor, a more proper comparison would be using $m_m(h)$, instead of $m_d$, but the difference is negligible. On the other hand, the mass fraction of atmospheric water vapor in air is in the order of 1\%: 
+Since the air in clouds is likely saturated in water vapor, a more proper comparison would be using $M_m(h)$, instead of $M_d$, but the difference is negligible. On the other hand, the mass fraction of atmospheric water vapor in air is in the order of 1\%: 
 
 $$
-w_{H_2O} = \dfrac{m_w}{m_d} \cdot f_{H_2O} \simeq 0.62 \cdot f_{H_2O} \sim 0\%-3\%
+w_{H_2O} = \dfrac{M_w}{M_d} \cdot f_{H_2O} \simeq 0.62 \cdot f_{H_2O} \sim 0\%-3\%
 $$
 
 Where, as we know, $f_{H_2O}$ ~0-5\%. Let's then compare the two mass fraction, and see how they change with altitude. As clouds only form when the relative humidity is close to 100\%, we can plot such case only.
@@ -641,8 +644,8 @@ Where, as we know, $f_{H_2O}$ ~0-5\%. Let's then compare the two mass fraction, 
 :tags: ["hide-input"]
 pressure_dry_arr = np.array([pressure_dry(alt) for alt in altitudes])   
 temperatures = np.array([ISA_temperature(alt) for alt in altitudes])
-water_vapor_mass_perc = np.array([m_water/m_dry * water_molar_fraction(RH=1.0,h=alt)*100 for alt in altitudes])
-air_specific_mass = m_dry/R * np.divide(pressure_dry_arr,temperatures)
+water_vapor_mass_perc = np.array([M_water/M_dry * water_molar_fraction(RH=1.0,h=alt)*100 for alt in altitudes])
+air_specific_mass = M_dry/R * np.divide(pressure_dry_arr,temperatures)
 min_LWC = 0.03*1E-3/air_specific_mass * 100   # M_water / M_dry * 100 to make %
 max_LWC = 0.45*1E-3/air_specific_mass * 100
 min_cum = 1.0*1E-3/air_specific_mass * 100
@@ -879,7 +882,7 @@ Altitude profile of $\mathrm{CO}_2$ molar fraction, in ppm. From [Brown et al. (
 Since the atmospheric pressure at 85 km is $p_{dry}(85\,\mathrm{km})\approx 0.5\,\mathrm{Pa}$. We are therefore talking about minuscole changes, so that we are allowed to be rough. [](#fig:avgm-altitude) shows the vertical profile of the average molar mass of air, computed from the [NRLMSIS empirical model](https://swx-trec.com/msis/) data. A simple exponential regression from an altitude of 85 km can be made (blue dashed line). We can use the following expression for the average molar mass of dry air, in g/mol:
 
 $$
-m_d(h)=\begin{cases}
+M_d(h)=\begin{cases}
 28.9656,\quad h\le 85\,\mathrm{km}\\
 28.9656\cdot e^{-0.002(h-85\,\mathrm{km})}, \quad h\gt 85\,\mathrm{km}
 \end{cases}
@@ -901,16 +904,22 @@ def air_avg_molar_mass(h,RH):
     #altitude in km
     if h < 20:
         f_water = water_molar_fraction(RH,h=h)
-        return (1 - f_water) * m_dry + f_water * m_water
+        return (1 - f_water) * M_dry + f_water * M_water
     elif h < 85:
-        return m_dry
+        return M_dry
     else:
-        return m_dry * np.exp(-0.002*(h-85))
+        return M_dry * np.exp(-0.002*(h-85))
 ```
 
 ## Real gases
 
-Let's get rid of the ideal gas approximation as well, and we will have the most accurate model ever. Ok, just kidding. We can however see how the description of non-ideality modifies the altitude profile. To do that, we need to go back to the start and redo the whole procedure to obtain a general expression of how pressure varies with altitude. 
+Let's get rid of the ideal gas approximation as well, and we will have the most accurate model ever. Ok, maybe not, but we can nonetheless see how the description of non-ideality modifies the altitude profile. To do that, we need to go back to the start and redo the whole procedure to obtain a general expression of how pressure varies with altitude. Our goal is to solve the equation that we obtained equaling the equation of state and the pressure exerted by a column of gas in a graviational field (equation {eq}`diff_pressure`) that we rewrite here in molar terms:
+
+$$
+\dfrac{d}{dh}p(h)=-g(h)\,M(h)c(h)
+$${diff_pressure_molar}
+
+where $M$ is the molar mass of air and $c$ the molar concentration (moles of gas particles per unit of volume, $c=N/V$).
 
 :::{note} 
 :dropdown:
@@ -920,51 +929,69 @@ Let's get rid of the ideal gas approximation as well, and we will have the most 
 Real gases are modelled taking into account their finite size and the intermolecular interactions. The simplest description is the **van der Waals model**, which considers gas molecules as hard spheres and interacting according to a Sutherland potential:
 
 $$
-p = \dfrac{nRT}{1-nb} - an^2
+p = \dfrac{c RT}{1-c b_{vdW}} - a_{vdW}c^2
 $$
 
-where $n$ is the molar density, following the notation we used here. $a$ and $b$ are two empirical parameters, determined for each individual gas. $b$ measures the molar volume of the gas particles, whereas $a$ describes the (attractive) short-range interactions. Another popular equation is the **Redlich–Kwong equation of state**, which, again expressed in terms of molar density, has the form:
+where $c$ is the molar concentration. The equation normally is expressed in terms of molar volume $V_m=V/N$, but for us it is more convenient to use its inverse, to solve equation {eq}`diff_pressure_molar`. $a_{vdW}$ and $b_{vdW}$, usually simply denoted as $a$ and $b$, are two empirical parameters, determined for each individual gas. $b_{vdW}$ measures the molar volume of the gas particles, whereas $a_{vdW}$ describes the (attractive) short-range interactions. Another popular equation is the **Redlich–Kwong equation of state**, which, again expressed in terms of molar density, has the form:
 
 $$
-p = \dfrac{nRT}{1-nb} - \dfrac{an^2}{\sqrt{T}(1+nb)}
+p = \dfrac{cRT}{1-cb_{RK}} - \dfrac{a_{RK}c^2}{\sqrt{T}(1+cb_{RK})}
 $$
 
-Note that $a$ and $b$, although they describe the same properties, are not the same in the two equations. 
+Note that $a_{RK}$ and $b_{RK}$, although they describe the same properties, are not the same in the two equations. 
 
 :::
 
-The Redlich–Kwong (RK) equation is generally more accurate than the van der Waals model, because of the modified second term. Although it hidden, both are cubic equations in the molar density. Try to isolate $n$ and you'll see. A cubic term would be however very unconvinient, because we need to solve a differential equation, eq. {eq}`diff_pressure`. Thus, we use the virial expansion:
+The Redlich–Kwong (RK) equation is generally more accurate than the van der Waals model, because of the modified second term. Although it hidden, both are cubic equations in the molar density. Try to isolate $c$ and you'll see. A cubic term would be however very unconvinient, because we need to solve a differential equation, eq. {eq}`diff_pressure`. Thus, we use the virial expansion:
 
 $$
-p = nRT \left(A + B(T)n^2 + C(T)n^3 + ...\right)
+p = cRT \left(1 + B(T)c + C(T)c^2 + ...\right)
 $$
 
-where $B(T)$, $C(T)$, etc., are temperature dependent constants. $A$ is equal to 1, since linearity is the ideal gas limit, $B(T)$ describes two-body interactions, $C(T)$ depends on both 2- and non additive 3-body interactions, and so on. We are going to cast the RK equation into the virial form and find the coefficient $B(T)$, since we want to stop at the second order. We just need to expand the RK equation around $n=0$:
+where $B(T)$, $C(T)$, etc., are temperature dependent constants. The first term in the parenthesis is equal to 1, since linearity is the ideal gas limit, $B(T)$ describes two-body interactions, $C(T)$ depends on both 2- and non additive 3-body interactions (ok, I don't really understand it...), and so on. We are going to cast the RK equation into the virial form and find the coefficient $B(T)$, since we want to stop at the second order. We just need to expand the RK equation around $c=0$, knowing that $p(c=0)=0$:
 
 $$
-\begin{align}
-p_{RK} &\approx p_{RK}(n=0) + n\bigg(\dfrac{d}{dn}p_{RK} \bigg)_{n=0} + \dfrac{1}{2}n^2 \bigg(\dfrac{d^2}{d^2n}p_{RK} \bigg)_{n=0}  \\
-       &\equiv nRT \left(A + B(T)n^2\right)
-\end{align}
+p_{RK} \approx c\bigg(\dfrac{d}{dc}p_{RK} \bigg)_{c=0} + \dfrac{1}{2}c^2 \bigg(\dfrac{d^2}{d^2c}p_{RK} \bigg)_{c=0} \equiv cRT + RTB(T)c^2
 $$
 
-After some trained monkey level methmatical steps, we obtain:
+After some trained monkey level mathematical steps, we obtain:
 
 $$
-B(T) = RTb-\dfrac{a}{\sqrt{T}}
+B(T) = b_{RK}-\dfrac{a_{RK}}{RT\sqrt{T}}
 $$
 
-where $a$ and $b$, I remind, are the RK constants. So that we have a quadratic expression of the pressure with respect to the molar density:
+We now need to do a final step: we need to overturn this equation find how the concentration varies with the pressure, $c(p_{RK})$. Another set of trivial steps and we arrive to:
 
 $$
-p_{RK}(n) \approx cRT + \left( RTb-\dfrac{a}{\sqrt{T}} \right)c^2
+c(p_{RK}) \approx \dfrac{p_{RK}}{RT} - B(T)\,\dfrac{p_{RT}^2 }{(RT)^2}
 $$
 
-We can now plug it into equation {eq}`diff_pressure`:
+So we can finally plug this into the differential equation, and let every variable to depend on altitude $h$:
 
 $$
-\dfrac{d}{dh}p(h)=-g(h)\,m(h)c(h) = -g(h)\,m(h)\dfrac{p(h)}{k_BT(h)} - g(h)\,m(h)\left( RTb-\dfrac{a}{\sqrt{T}} \right)n^2
+\dfrac{d}{dh}p(h) \approx -g(h)\,M(h)\dfrac{p(h)}{RT(h)} - g(h)\,M(h)B(T)\dfrac{p(h)^2}{(RT)^2}
 $$(diff_pressure_real)
+
+As expected, we have an extra term that depends on (the square of) the pressure. This does not worry us and we proceed. We are going to use my favorite method to solve it, named after David Bernoulli. Basically, we let $q(h) = p(h)^{-1}$ and solve it as a linear differential equation. Magic! The algebraic steps here are less trivial, but still very well manageable. If you dare to try it at home, notice that you'll find the ideal gas expression, which allows us to write a nice expression:
+
+$$
+p_{RK}(h) = \dfrac{p_{ideal}(h)}{1+\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{(RT(z))^2}p_{ideal}(z)dz}
+$$
+where:
+$$
+p_{ideal}(h) = p(0) \exp\bigg[\int_0^h\dfrac{-g(z)M(z)}{RT(z)}\bigg]dz
+$$
+
+We can then write:
+$$
+p_{RK}(h) = f_{real,RK}(h)p_{ideal}(h)
+$$
+where:
+$$
+f_{real,RK} = \left(1+\dfrac{p(0)}{R^2}\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{T(z)^2}\exp\bigg[\int_0^{z}\dfrac{-g(z')M(z')}{RT(z')}dz'\bigg]dz\right)^{-1}
+$$
+
+
 
 
 ## Pressure at sea level
@@ -988,10 +1015,10 @@ $$
 \chi_m = \dfrac{p_{moist}(0)}{p_{std}(0)} \approx \dfrac{\int_{0}^{\infty} \frac{p_{dry}(z)m_{m}(z)g(z)}{T(z)}dz}{\int_{0}^{\infty} \frac{p_{dry}(z)m_{sdt}(z)g(z)}{T(z)}dz} 
 $$
 
-where we approximated the moist air pressure with the dry air pressure. By explicitating $m_m(z)$ according to equation {eq}`water_molar_frac` we obtain
+where we approximated the moist air pressure with the dry air pressure. By explicitating $M_m(z)$ according to equation {eq}`water_molar_frac` we obtain
 
 $$
-\chi_m \approx 1 - \dfrac{m_d-m_w}{m_d} \dfrac{\int_{0}^{\infty} f_{H_2O}(z)\frac{p_{dry}(z)}{T(z)}dz}{\int_{0}^{\infty} \frac{p_{dry}(z)}{T(z)}dz} 
+\chi_m \approx 1 - \dfrac{M_d-M_w}{M_d} \dfrac{\int_{0}^{\infty} f_{H_2O}(z)\frac{p_{dry}(z)}{T(z)}dz}{\int_{0}^{\infty} \frac{p_{dry}(z)}{T(z)}dz} 
 $$
 
 
@@ -1005,13 +1032,13 @@ def calc_chi(RH,maxh=84.852):
     integral_frac, _ = quad(lambda z: water_molar_fraction(RH,h=z) * pressure_dry(z) / ISA_temperature(z), 0, maxh, limit=100, points=[0, 11, 20, 32, 47, 51, 71, 84.852])
     integral_tot, _ = quad(lambda z: pressure_dry(z) / ISA_temperature(z), 0, maxh, limit=100, points=[0, 11, 20, 32, 47, 51, 71, 84.852])
     
-    chi = 1 - ((m_dry - m_water) / m_dry) * (integral_frac / integral_tot)
+    chi = 1 - ((M_dry - M_water) / M_dry) * (integral_frac / integral_tot)
 
     return chi
 
 def pressure_moist(h,RH,chi):
     integral, _ = quad(lambda z: water_molar_fraction(RH,h=z) / ISA_temperature(z), 0, h, limit=100, points=[0, 11, 20, 32, 47, 51, 71, 84.852])
-    p_moist = chi * pressure_dry(h) * np.exp(g0 / R * (m_dry - m_water) * 1000 * integral)
+    p_moist = chi * pressure_dry(h) * np.exp(g0 / R * (M_dry - M_water) * 1000 * integral)
 
     return p_moist
 ```
@@ -1047,7 +1074,7 @@ We can indeed see that the effect of water vapor is small, and the two pressure 
 We thus have built the best model we can concieve for atmospheric model. If we allow temperature and humidity as well to change with latitude, we can write
 
 $$
-p(h,\phi)=p_0\exp\bigg[-\dfrac{1}{R}\int_0^h\dfrac{g(z,\phi)m_m(z,\phi)}{T(z,\phi)}dz\bigg]
+p(h,\phi)=p_0\exp\bigg[-\dfrac{1}{R}\int_0^h\dfrac{g(z,\phi)M_m(z,\phi)}{T(z,\phi)}dz\bigg]
 $$
 
 Our python function will then include the recently defined `g_WGS84_altitude`, `air_avg_molar_mass`, and `ISA_temperature_1000km` functions to evaluate the integral. We don't need to include our recent enhancements of the model in the calculation of $p_{dry}$, since that is needed only to obtain $f_{H_2O}$.
@@ -1086,7 +1113,7 @@ def calc_chi_1000km(RH,maxh=1000,T_surf=288.15,L0=6.5):
     integral_frac, _ = quad(lambda z: water_molar_fraction_1000km(RH,z,T_surf,L0) * pressure_dry_1000km(z,T_surf,L0) / ISA_temperature_1000km(z,T_surf,L0), 0, 20, limit=100, points=[0, H1, 20])  #up to 20 km since above that the water fraction is 0 
     integral_norm, _ = quad(lambda z: pressure_dry_1000km(z,T_surf,L0) / ISA_temperature_1000km(z,T_surf,L0), 0, maxh, limit=100, points=[0, H1, 20, 32, 47, 51, 71, 84.852, 107.41])
     
-    chi = 1 - ((m_dry - m_water) / m_dry) * (integral_frac / integral_norm)
+    chi = 1 - ((M_dry - M_water) / M_dry) * (integral_frac / integral_norm)
 
     return chi
 
@@ -1114,7 +1141,7 @@ with $m$ the molar mass. We can then calculate the total atmospheric mass $M_{at
 $$
 \begin{align}
  M_{atm} &= \int_{0}^{2\pi} \int_{0}^{\pi} \int_{R(\phi)}^{\infty} \rho(r,\phi)\, d\theta\, \sin(\phi) d\phi\, r^2 dr \\[15pt]
- &= \int_{0}^{2\pi} \int_{0}^{\pi} \int_{R(\phi)}^{\infty} \dfrac{m_m(r-R(\phi),\phi)\,p(r-R(\phi),\phi)}{RT(r-R(\phi))} d\theta\, \sin(\phi) d\phi\, r^2 dr 
+ &= \int_{0}^{2\pi} \int_{0}^{\pi} \int_{R(\phi)}^{\infty} \dfrac{M_m(r-R(\phi),\phi)\,p(r-R(\phi),\phi)}{RT(r-R(\phi))} d\theta\, \sin(\phi) d\phi\, r^2 dr 
 \end{align}
 $$
 
@@ -1122,8 +1149,8 @@ The radial integration should start from the Earth's surface ($R(\phi)$), and si
 
 $$
 \begin{align}
- M_{atm} &= \dfrac{2\pi}{R} \int_{0}^{\pi} \int_{0}^{\infty} \dfrac{m_m(h,\phi)\,p(h,\phi)}{T(h,\phi)}  \sin(\phi) d\phi\, \left(h+R(\phi)\right)^2 dh \\[15pt]
-&= \dfrac{2\pi}{R} p(0) \int_{0}^{\pi} \int_{0}^{\infty} \dfrac{m_m(h,\phi)}{T(h,\phi)}\exp\bigg[-\dfrac{1}{R}\int_0^{h} \dfrac{g(z,\phi)m_m(z,\phi)}{T(z,\phi)}dz\bigg]  \sin(\phi) d\phi\, \left(h+R(\phi)\right)^2 dh
+ M_{atm} &= \dfrac{2\pi}{R} \int_{0}^{\pi} \int_{0}^{\infty} \dfrac{M_m(h,\phi)\,p(h,\phi)}{T(h,\phi)}  \sin(\phi) d\phi\, \left(h+R(\phi)\right)^2 dh \\[15pt]
+&= \dfrac{2\pi}{R} p(0) \int_{0}^{\pi} \int_{0}^{\infty} \dfrac{M_m(h,\phi)}{T(h,\phi)}\exp\bigg[-\dfrac{1}{R}\int_0^{h} \dfrac{g(z,\phi)M_m(z,\phi)}{T(z,\phi)}dz\bigg]  \sin(\phi) d\phi\, \left(h+R(\phi)\right)^2 dh
 \end{align}
 $$
 
