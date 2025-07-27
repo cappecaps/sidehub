@@ -62,10 +62,10 @@ The atmosphere is a mass of air that is gravitationally bound to a planet. On Ea
 The development of the our model necessarily starts with a description of the gas molecules. And what's a better start than the ideal gas law? This approximation actually works well with the Earth’s atmosphere, since it has sufficiently low densities and high temperatures. The equation of state of ideal gases is given by
 
 $$
-    p=nk_BT
+    p = \dfrac{N}{V}k_BT =  nk_BT
 $$ (idealgas)
 
-where $n$ the numerical density of the gas, and $T$ its temperature. To model Earth’s atmosphere, we imagine an infinitely high column of gas subjected to Earth's gravitational field. We assume for now that Earth is spherically symmetric. We also assume that the mass of the atmosphere is negligible, so that there is no gravitational self-interaction, which would make the problem not analytically solvable. Within these assumptions, the pressure of the gas at a certain altitude $h$ must be equivalent to the pressure exerted by the column of gas above it, due to the gravitational field. We thus have two expression for the pressure:
+where $N$ is the number of particles, $V$ the volume, $n$ is the numerical density of the gas ($n=N/V$), and $T$ the temperature. To model Earth’s atmosphere, we imagine an infinitely high column of gas subjected to Earth's gravitational field. We assume for now that Earth is spherically symmetric. We also assume that the mass of the atmosphere is negligible, so that there is no gravitational self-interaction, which would make the problem not analytically solvable. Within these assumptions, the pressure of the gas at a certain altitude $h$ must be equivalent to the pressure exerted by the column of gas above it, due to the gravitational field. We thus have two expression for the pressure:
 
 $$
 \begin{cases}
@@ -74,7 +74,12 @@ $$
 \end{cases}
 $$ (pressure_gravfield)
 
-where $F$ the weight of the gas column above $h$. The pressure of the column can also be calculated as the integral along the vertical direction $z$ of the mass density $\rho(z)$ of the gas, times the gravitational acceleration $g(z)$:
+:::{figure} ../../images/air_column.png
+:align: center
+:w: 290px
+:::
+
+where $F$ the weight of the gas column from and above $h$. The pressure of the column can also be calculated as the integral along the vertical direction $z$ of the mass density $\rho(z)$ of the gas, times the gravitational acceleration $g(z)$:
 
 $$
 p(h) = \int_h^{+\infty}g(z)\rho(z) dz  = \int_h^{+\infty}g(z)m(z)n(z) dz 
@@ -917,9 +922,9 @@ Let's get rid of the ideal gas approximation as well, and we will have the most 
 
 $$
 \dfrac{d}{dh}p(h)=-g(h)\,M(h)c(h)
-$${diff_pressure_molar}
+$$(diff_pressure_molar)
 
-where $M$ is the molar mass of air and $c$ the molar concentration (moles of gas particles per unit of volume, $c=N/V$).
+where $M$ is the molar mass of air and $c$ the molar concentration (moles of gas particles per unit of volume, $c=N/(N_AV)$).
 
 :::{note} 
 :dropdown:
@@ -966,32 +971,35 @@ $$
 c(p_{RK}) \approx \dfrac{p_{RK}}{RT} - B(T)\,\dfrac{p_{RT}^2 }{(RT)^2}
 $$
 
-So we can finally plug this into the differential equation, and let every variable to depend on altitude $h$:
+So we can finally plug this into the differential equation, and let every variable depend on altitude $h$:
 
 $$
-\dfrac{d}{dh}p(h) \approx -g(h)\,M(h)\dfrac{p(h)}{RT(h)} - g(h)\,M(h)B(T)\dfrac{p(h)^2}{(RT)^2}
-$$(diff_pressure_real)
+\label{diff_pressure_real}
+\dfrac{d}{dh}p(h) \approx -g(h)\,M(h)\dfrac{p(h)}{RT(h)} + g(h)\,M(h)B(T)\dfrac{p(h)^2}{(RT)^2}
+$$
 
 As expected, we have an extra term that depends on (the square of) the pressure. This does not worry us and we proceed. We are going to use my favorite method to solve it, named after David Bernoulli. Basically, we let $q(h) = p(h)^{-1}$ and solve it as a linear differential equation. Magic! The algebraic steps here are less trivial, but still very well manageable. If you dare to try it at home, notice that you'll find the ideal gas expression, which allows us to write a nice expression:
 
 $$
-p_{RK}(h) = \dfrac{p_{ideal}(h)}{1+\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{(RT(z))^2}p_{ideal}(z)dz}
+p_{RK}(h) = \dfrac{p_{ideal}(h)}{1-\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{(RT(z))^2}p_{ideal}(z)dz}
 $$
 where:
 $$
 p_{ideal}(h) = p(0) \exp\bigg[\int_0^h\dfrac{-g(z)M(z)}{RT(z)}\bigg]dz
 $$
 
-We can then write:
+This means that the description of non-ideality differs from the ideal case by a factor, what we can call $f_{real,RK}(h)$:
 $$
 p_{RK}(h) = f_{real,RK}(h)p_{ideal}(h)
 $$
 where:
 $$
-f_{real,RK} = \left(1+\dfrac{p(0)}{R^2}\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{T(z)^2}\exp\bigg[\int_0^{z}\dfrac{-g(z')M(z')}{RT(z')}dz'\bigg]dz\right)^{-1}
+f_{real,RK} = \left(1-\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{R^2T(z)^2}p_0\exp\bigg[\int_0^{z}\dfrac{-g(z')M(z')}{RT(z')}dz'\bigg]dz\right)^{-1}
 $$
-
-
+This factor in turn depends on the ideal gas pressure profile, so it is more complicated that a simple multiplying factor. Do understand how it acts, let's consider the simplest case: everything is constant. In this case, the integrals are easily solvable:
+$$
+f_{real,RK} \approx \left(1-\dfrac{B(T_{avg})}{RT_{avg}}p_0\left(1-e^{\frac{-g_0 M_0 h}{RT_{avg}}}\right)\right)^{-1}
+$$
 
 
 ## Pressure at sea level
