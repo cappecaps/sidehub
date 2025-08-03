@@ -11,12 +11,12 @@
 
 [](./continuous_return.md): what is the general formula of returns in the infinitely small time step limit?
 
-[](./DCA.md): Dollar Cost Averaging in the continuous return limit
+%[](./DCA.md): Dollar Cost Averaging in the continuous return limit
 
-[](./trading_tax_efficiency.md): when does capital gain overcome taxes?
+%[](./trading_tax_efficiency.md): when does capital gain overcome taxes?
 
-[](./equally_vs_MC_weighted.md): what's the difference in returns between market cap weighted and equally weighted ETFs?
+%[](./equally_vs_MC_weighted.md): what's the difference in returns between market cap weighted and equally weighted ETFs?
 
-[](./index_funds.md): work in progress
+%[](./index_funds.md): work in progress
 
 

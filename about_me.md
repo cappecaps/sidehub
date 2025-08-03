@@ -1,13 +1,10 @@
 # About me
 
 ```{image} images/sittingcat.jpg
-:width: 500px
+:width: 400px
 ```
 
-Hello!
-
-
-
+I am a computational chemist.
 
 :::{aside}
 ```{image} images/propic.jpg
@@ -15,6 +12,10 @@ Hello!
 :width: 160px
 ```
 :::
+
+
+
+
 
 
 

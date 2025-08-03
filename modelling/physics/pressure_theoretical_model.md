@@ -35,9 +35,9 @@ kernelspec:
 
 :::{warning} Beware!
 :label: abinitio-warning
-This is an **_ab initio_ modelling** project. I like to model things by myself, so there will be mistakes, errors, inaccuracies, and wrong interpretations. The reader is advised! My projects are the opposite of standing on the shoulders of giants. They are like trying to build my own giant, and he's barely alive.
+Here is an **_ab initio_ modeling** project. This comes with probable mistakes, inaccuracies, and wrong interpretations. You are advised! But also are very welcome to send me any feedback or comments.
 
-The information that I gathered from external sources is found inside the blue boxes. Everything outside the blue boxes is written and developed entirely by me. 
+The information that I gathered from external sources is found inside the blue boxes. Everything outside is written and developed by me, even though most concepts are likely well-known since the 1800. I somehow find joy in re-discovering things!
 :::
 
 %```{embed} #abinitio-warning
@@ -116,6 +116,11 @@ We recognize $m_0g_0h$ as the potential energy of a single gas particle, and $k_
 
 From the formula we can infer how the pressure profile changes with different parameters. A smaller particle mass makes the gas less attracted to the surface, and thus more spread toward higher altitudes. The same effect is achieved with higher temperatures, because of the higher kinetic energy of the molecules. Vice-versa, larger masses and lower temperatures make the gas more "compressed" at the surface.
 
+Since I'm a chemist, I prefer to deal with molar quantities:
+$$
+p_{bar}(h)=p_0\exp\bigg[-\dfrac{M_0g_0h}{RT}\bigg]
+$$(barometric_formula_molar)
+Where $M_0$ is the average molar mass of air, and $R$ is the gas constant. We used the relation $m_0/k_B = M_0/R$.
 
 
 :::{note}
@@ -246,30 +251,29 @@ According to the [NRLMSIS empirical model](https://swx-trec.com/msis/?lz=N4Igtg9
 
 :::
 
-Our current model already results in a very good estimation of the pressure, especially close to the surface. So far, we applied the following approximations:
+Our current model already results in a very good estimation of the pressure, especially close to the surface. So far, we applied the following approximations, within the context of a static atmosphere (no wind):
 - Constant temperature
 - Dry air
 - Constant atmospheric composition
 - Spherical Earth, no spin
 - Constant gravitational field
 - Ideal gas law
-- Zero net mass flux (no wind)
 
-Let's keep improving our model by removing all of them, one by one, except the last one. 
+Let's then improve the accuracy of our model, starting from the barometric formula {eq}`barometric_formula` and removing these approximations one by one!
 
 
 ## Temperature variation
 
-Let's start from the barometric formula {eq}`barometric_formula` and remove approximations one by one to finally arrive at the general formula {eq}`general_formula`. First, we introduce the empirical lapse rates that we learned above. We thus leave only the temperature term in the integral:
+First, we introduce the empirical lapse rates that we learned above, so that we have a temperature that depends on the altitude, $T_{isa}(h)$, where "isa" stands for International Standard Atmosphere. We thus need to leave the temperature term in the integral:
 
 $$
-p_{dry}(h)=p_0\exp\bigg[-\dfrac{g_0M_d}{R}\int_0^h\dfrac{1}{T(z)}dz\bigg]
+p_{dry}(h)=p_0\exp\bigg[-\dfrac{g_0M_d}{R}\int_0^h\dfrac{1}{T_{isa}(z)}dz\bigg]
 $$(with_lapse)
-Where $M_d$ is the average molar mass of dry air, and $R$ is the gas constant $R$. We used the relation $m_0/k_B = M_d/R$.
+
 Now the temperature can be written as the general expression:
 
 $$
-T(h)= T(h_{i}) - \Gamma_i (h-h_{i})
+T_{isa}(h)= T_{isa}(h_{i}) - \Gamma_i (h-h_{i})
 $$(T_fromlapse)
 
 with $i$ the atmospheric layer in which $h$ lies, and $h_{i}$ the base altitude of the layer $i$. This however can be calculated with a simple code. Let's import the packages
@@ -918,7 +922,7 @@ def air_avg_molar_mass(h,RH):
 
 ## Real gases
 
-Let's get rid of the ideal gas approximation as well, and we will have the most accurate model ever. Ok, maybe not, but we can nonetheless see how the description of non-ideality modifies the altitude profile. To do that, we need to go back to the start and redo the whole procedure to obtain a general expression of how pressure varies with altitude. Our goal is to solve the equation that we obtained equaling the equation of state and the pressure exerted by a column of gas in a graviational field (equation {eq}`diff_pressure`) that we rewrite here in molar terms:
+Let's get rid of the ideal gas approximation as well, so that we will have the most accurate model ever. Ok, maybe not, but we can nonetheless see how the description of non-ideality modifies the altitude profile. To do so, we need to go back to the start and redo the whole procedure to obtain a general expression of how pressure varies with altitude. Our goal is to solve the equation that we obtained equaling the equation of state and the pressure exerted by a column of gas in a graviational field (equation {eq}`diff_pressure`) that we rewrite here in molar terms:
 
 $$
 \dfrac{d}{dh}p(h)=-g(h)\,M(h)c(h)
@@ -937,7 +941,7 @@ $$
 p = \dfrac{c RT}{1-c b_{vdW}} - a_{vdW}c^2
 $$
 
-where $c$ is the molar concentration. The equation normally is expressed in terms of molar volume $V_m=V/N$, but for us it is more convenient to use its inverse, to solve equation {eq}`diff_pressure_molar`. $a_{vdW}$ and $b_{vdW}$, usually simply denoted as $a$ and $b$, are two empirical parameters, determined for each individual gas. $b_{vdW}$ measures the molar volume of the gas particles, whereas $a_{vdW}$ describes the (attractive) short-range interactions. Another popular equation is the **Redlich–Kwong equation of state**, which, again expressed in terms of molar density, has the form:
+where $c$ is the molar concentration. The equation normally is expressed in terms of molar volume $V_m=V/N$, but for us it is more convenient to use its inverse, to solve equation {eq}`diff_pressure_molar`. $a_{vdW}$ and $b_{vdW}$, usually simply denoted as $a$ and $b$, are two empirical parameters, determined for each individual gas. $b_{vdW}$ measures the molar volume of the gas particles, whereas $a_{vdW}$ describes the (attractive) short-range interactions. Another popular equation is the **Redlich–Kwong equation of state**, which, again expressed in terms of molar concentration, has the form:
 
 $$
 p = \dfrac{cRT}{1-cb_{RK}} - \dfrac{a_{RK}c^2}{\sqrt{T}(1+cb_{RK})}
@@ -947,7 +951,7 @@ Note that $a_{RK}$ and $b_{RK}$, although they describe the same properties, are
 
 :::
 
-The Redlich–Kwong (RK) equation is generally more accurate than the van der Waals model, because of the modified second term. Although it hidden, both are cubic equations in the molar density. Try to isolate $c$ and you'll see. A cubic term would be however very unconvinient, because we need to solve a differential equation, eq. {eq}`diff_pressure`. Thus, we use the virial expansion:
+The Redlich–Kwong (RK) equation is generally more accurate than the van der Waals model, because of the modified second term. Both relations are cubic equations with respect to the molar concentration $c$. Try to isolate $c$ and you'll see. A cubic term would be however very unconvinient, because we need to solve a differential equation, eq. {eq}`diff_pressure`. Thus, we use the virial expansion:
 
 $$
 p = cRT \left(1 + B(T)c + C(T)c^2 + ...\right)
@@ -985,7 +989,7 @@ p_{RK}(h) = \dfrac{p_{ideal}(h)}{1-\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{(RT(z))^2}p
 $$
 where:
 $$
-p_{ideal}(h) = p(0) \exp\bigg[\int_0^h\dfrac{-g(z)M(z)}{RT(z)}\bigg]dz
+p_{ideal}(h) = p(0) \exp\bigg[-\int_0^h\dfrac{g(z)M(z)}{RT(z)}\bigg]dz
 $$
 
 This means that the description of non-ideality differs from the ideal case by a factor, what we can call $f_{real,RK}(h)$:
@@ -994,11 +998,11 @@ p_{RK}(h) = f_{real,RK}(h)p_{ideal}(h)
 $$
 where:
 $$
-f_{real,RK} = \left(1-\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{R^2T(z)^2}p_0\exp\bigg[\int_0^{z}\dfrac{-g(z')M(z')}{RT(z')}dz'\bigg]dz\right)^{-1}
+f_{real,RK} = \left(1-\int_0^{h}\dfrac{g(z)M(z)B(T(z))}{R^2T(z)^2}p_0\exp\bigg[-\int_0^{z}\dfrac{g(z')M(z')}{RT(z')}dz'\bigg]dz\right)^{-1}
 $$
 This factor in turn depends on the ideal gas pressure profile, so it is more complicated that a simple multiplying factor. Do understand how it acts, let's consider the simplest case: everything is constant. In this case, the integrals are easily solvable:
 $$
-f_{real,RK} \approx \left(1-\dfrac{B(T_{avg})}{RT_{avg}}p_0\left(1-e^{\frac{-g_0 M_0 h}{RT_{avg}}}\right)\right)^{-1}
+f_{real,RK} \approx \left(1-\dfrac{B(T_{avg})}{RT_{avg}}p_0\left(1-e^{-\frac{g_0 M_0 h}{RT_{avg}}}\right)\right)^{-1}
 $$
 
 
