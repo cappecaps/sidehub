@@ -9,7 +9,9 @@
 
 ## Mathematical models in finance
 
-[](./continuous_return.md): what is the general formula of returns in the infinitely small time step limit?
+- [](./continuous_return.md): what is the general formula of returns in the infinitely small time step limit?
+
+- More to come...
 
 %[](./DCA.md): Dollar Cost Averaging in the continuous return limit
 

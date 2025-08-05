@@ -1,12 +1,14 @@
 ---
 title: Content
+authors: ""
 ---
 
+Work in progress. 
 
 ### [](modelling/physics/intro_physics.md)
 
 
-### [Finance modeling](modelling/intro_finance.md)
+### [](modelling/finance/intro_finance.md)
 
 **Marco**
 

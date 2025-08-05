@@ -811,20 +811,19 @@ The thermosphere is the outer layer of the atmosphere, above 80 km of altitude. 
 
 ### Temperatures
 
-The ISA model does not include the thermosphere, but reaches a maximum altitude of 86 km, where the temperature is 186.946 K. The data for the thermosphere is provided by the [NRLMSIS empirical model](https://swx-trec.com/msis/). The temperature profile of the two models combined is shown in [](#fig:thermo-T-altitude), where I extended the constant temperature of the stratopause (186.946 K) up to 107.41 km, and used an exponential regression againsts the NRLMSIS data (see red line). The empirical fitting gives the function:
+The ISA model does not include the thermosphere, but reaches a maximum altitude of 86 km, where the temperature is 186.946 K. The data for the thermosphere is provided by the [NRLMSIS empirical model](https://swx-trec.com/msis/). The temperature profile of the two models combined is shown in the following Desmos plot:
 
-$$
-T(h) =  -9799 e^{-0.0238x} + 947.23, \quad 107.41\,\mathrm{km} \le h \le 1000 \,\mathrm{km}
-$$(eq:thermo_fitting)
+<iframe 
+src="https://www.desmos.com/calculator/da2a4b12e2?embed" 
+width="500" 
+height="500" 
+style="border: 1px solid #ccc" 
+frameborder=0
+placeholder="../../images/thermosphere_T_h.jpg"
+></iframe>
 
-:::{figure} ../../images/thermosphere_T_h.png
-:label: fig:thermo-T-altitude
-:align: center
-:w: 400px
+Where the red line are the temperatures from the ISA model (below 90 km), while the blue dots represents the thermosphere. Data from the [NRLMSIS empirical model](https://swx-trec.com/msis/) at 2024-05-01 00:00 UTC over 0°N 50°E. 
 
-Temperature profile with altitude (hollow black dots). The orange line are the temperatures from the ISA model (below 107.41 km), while the red line is my fitting (eqaution {eq}`eq:thermo_fitting`). Data from the [NRLMSIS empirical model](https://swx-trec.com/msis/) at 2024-05-01 00:00 UTC over 0°N 50°E. Graph from my [Desmos](https://www.desmos.com/calculator/pnt2qmypuf).
-
-:::
 
 We can include the thermosphere in a new function that returns the temperature up to 1000 km above sea level, and extend the functions to calculate $\chi$ and $p_{dry}$. Let's also add the possibility to change the surface temperature and the lapse rate, as long as it is positive (temperature decreases with altitude).
 
@@ -890,20 +889,15 @@ Altitude profile of $\mathrm{CO}_2$ molar fraction, in ppm. From [Brown et al. (
 
 Since the atmospheric pressure at 85 km is $p_{dry}(85\,\mathrm{km})\approx 0.5\,\mathrm{Pa}$. We are therefore talking about minuscole changes, so that we are allowed to be rough. [](#fig:avgm-altitude) shows the vertical profile of the average molar mass of air, computed from the [NRLMSIS empirical model](https://swx-trec.com/msis/) data. A simple exponential regression from an altitude of 85 km can be made (blue dashed line). We can use the following expression for the average molar mass of dry air, in g/mol:
 
-$$
-M_d(h)=\begin{cases}
-28.9656,\quad h\le 85\,\mathrm{km}\\
-28.9656\cdot e^{-0.002(h-85\,\mathrm{km})}, \quad h\gt 85\,\mathrm{km}
-\end{cases}
-$$
 
-
-:::{figure} ../../images/avgm_altitude.png
-:label: fig:avgm-altitude
-:align: center
-:w: 400px
-
-
+<iframe 
+src="https://www.desmos.com/calculator/96c998d33b?embed" 
+width="500" 
+height="500" 
+style="border: 1px solid #ccc" 
+frameborder=0
+placeholder="../../images/avgm_altitude.png"
+></iframe>
 Average molar mass of air (black dots) versus altitude. The blue dashed line is the (exponential) regression. Data from the [NRLMSIS empirical model](https://swx-trec.com/msis/) at 2024-05-01 00:00 UTC over 0°N 50°E. 
 
 :::
