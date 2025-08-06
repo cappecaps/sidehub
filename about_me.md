@@ -4,7 +4,6 @@
 :width: 400px
 ```
 
-I am a computational chemist.
 
 :::{aside}
 ```{image} images/propic.jpg

@@ -117,11 +117,22 @@ We recognize $m_0g_0h$ as the potential energy of a single gas particle, and $k_
 From the formula we can infer how the pressure profile changes with different parameters. A smaller particle mass makes the gas less attracted to the surface, and thus more spread toward higher altitudes. The same effect is achieved with higher temperatures, because of the higher kinetic energy of the molecules. Vice-versa, larger masses and lower temperatures make the gas more "compressed" at the surface.
 
 Since I'm a chemist, I prefer to deal with molar quantities:
+
 $$
 p_{bar}(h)=p_0\exp\bigg[-\dfrac{M_0g_0h}{RT}\bigg]
-$$(barometric_formula_molar)
+$$ (barometric_formula_molar)
+
 Where $M_0$ is the average molar mass of air, and $R$ is the gas constant. We used the relation $m_0/k_B = M_0/R$.
 
+THe barometric formula is already a very good estimation of the pressure profile, especially close to the surface. It considers the following approximations:
+- Constant temperature
+- Dry air
+- Constant atmospheric composition
+- Spherical Earth, no spin
+- Constant gravitational field
+- Ideal gas law
+
+Of course within the context of a static atmosphere, with no wind. Let's then improve the accuracy of our model, starting from the barometric formula {eq}`barometric_formula` and removing these approximations one by one!
 
 :::{note}
 :dropdown:
@@ -175,6 +186,12 @@ which is valid only at the vicinity of Earth's surface. The ISA provides a set o
 ```
 
 There are other layers above, but can be ignored for now since the atmosphere is extremely rarefied there. The ranges are given in geopotential altitude.
+
+```{figure} ../../images/lower_layers_atmosphere.jpg
+:width: 500px
+:align: center
+Lower layers of the atmopshere and the temperature profile. Source: [NOAA](https://www.noaa.gov/jetstream/atmosphere/layers-of-atmosphere).
+```
 
 
 ### Chemical composition
@@ -251,26 +268,20 @@ According to the [NRLMSIS empirical model](https://swx-trec.com/msis/?lz=N4Igtg9
 
 :::
 
-Our current model already results in a very good estimation of the pressure, especially close to the surface. So far, we applied the following approximations, within the context of a static atmosphere (no wind):
-- Constant temperature
-- Dry air
-- Constant atmospheric composition
-- Spherical Earth, no spin
-- Constant gravitational field
-- Ideal gas law
 
-Let's then improve the accuracy of our model, starting from the barometric formula {eq}`barometric_formula` and removing these approximations one by one!
+
+
 
 
 ## Temperature variation
 
-First, we introduce the empirical lapse rates that we learned above, so that we have a temperature that depends on the altitude, $T_{isa}(h)$, where "isa" stands for International Standard Atmosphere. We thus need to leave the temperature term in the integral:
+First, we introduce the empirical lapse rates that we learned above, so that we have a temperature that depends on the altitude, $T_{isa}(h)$, where the subscript "isa" stands for International Standard Atmosphere. We thus need to leave the temperature term in the integral:
 
 $$
 p_{dry}(h)=p_0\exp\bigg[-\dfrac{g_0M_d}{R}\int_0^h\dfrac{1}{T_{isa}(z)}dz\bigg]
 $$(with_lapse)
 
-Now the temperature can be written as the general expression:
+The general expression for the temperature is:
 
 $$
 T_{isa}(h)= T_{isa}(h_{i}) - \Gamma_i (h-h_{i})
@@ -327,7 +338,7 @@ temperatures = [ISA_temperature(alt) for alt in altitudes]
 plt.rcParams.update({'font.size': 9})
 plt.figure(figsize=(7, 3))
 plt.plot(altitudes, temperatures, color="darkred",lw=2)
-plt.xlabel("Altitude (m)")
+plt.xlabel("Altitude (km)")
 plt.ylabel("Temperature (K)")
 plt.grid(True)
 plt.show()
@@ -1162,10 +1173,6 @@ $$
 
 where we explicitated $p(h,\phi)$. To calculate $M_{atm}$ thus requires to evaluate three integrals. It may make your laptop hot.
 
-
-## Appendix A: Real gases
-
-%Virial theorem up to second order
 
 
 
