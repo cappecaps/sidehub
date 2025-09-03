@@ -1,15 +1,21 @@
-# Finance Modelling
+---
+title: Finance - theory and modeling
+subtitle: or at least what I've learned so far
+---
+
+# Finance
 
 %Idea: create an index of risk based on max drawdown vs boh
 % Triggered by ep 200 of The Bull. Diversification prevents strong drawdowns, but also strong increases. 
 
 %Idea: simulate a set of investors with different properties that buy and sell stocks. The properties are e.g. risk tolerance, activeness, strategy. Then (ideally) simulate news that trigger buy and sells. Then see which one loses money, and which one gains it. It may be too complicated 
 
+## A bit of theory
+
+- [](./basics_of_finance.md): a collection of notions I've learned in the past years, plus a template for an Investment Policy Statement.
 
 
 ## Mathematical models in finance
-
-- [](./basics_of_finance.md): a collection of notions I've learned in the past years, plus a template for an Investment Policy Statement.
 
 - [](./continuous_return.md): what is the general formula of returns in the infinitely small time step limit?
 
