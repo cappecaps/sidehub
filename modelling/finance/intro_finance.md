@@ -1,5 +1,6 @@
 ---
 title: Finance - theory and modeling
+short_title: Finance
 subtitle: or at least what I've learned so far
 ---
 
