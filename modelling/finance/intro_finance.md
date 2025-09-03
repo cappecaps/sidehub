@@ -9,6 +9,8 @@
 
 ## Mathematical models in finance
 
+- [](./basics_of_finance.md): a collection of notions I've learned in the past years, plus a template for an Investment Policy Statement.
+
 - [](./continuous_return.md): what is the general formula of returns in the infinitely small time step limit?
 
 - More to come...
