@@ -3,8 +3,6 @@ title: Finance - theory and modeling
 subtitle: or at least what I've learned so far
 ---
 
-# Finance
-
 %Idea: create an index of risk based on max drawdown vs boh
 % Triggered by ep 200 of The Bull. Diversification prevents strong drawdowns, but also strong increases. 
 
