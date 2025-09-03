@@ -29,9 +29,9 @@ project:
         #- file: modelling/physics/spotlight.md
         #- file: modelling/physics/tools.md
     - title: Finance
-    - file: modelling/finance/basics_of_finance.md
     - file: modelling/finance/intro_finance.md
       children:
+        - file: modelling/finance/basics_of_finance.md
         #- file: modelling/finance/trading_tax_efficiency.md
         #- file: modelling/finance/DCA.md
         #- file: modelling/finance/continuous_return.md
