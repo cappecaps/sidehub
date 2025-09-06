@@ -7,4 +7,4 @@ subject: Finance - theory
 
 You can find it in the following Notion page:
 
-[Basics of Personal Finance](https://www.notion.so/sidehub/2632f64371a380f592c8eb0661a14892?v=2632f64371a3809fb741000c6e4d0011)
+[Basics of Personal Finance](https://sidehub.notion.site/Basics-of-Personal-Finance-2632f64371a38089a5bfde2d56a16e71)
