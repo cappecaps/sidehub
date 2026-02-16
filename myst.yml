@@ -2,7 +2,7 @@
 version: 1
 project:
   id: de63a922-887b-425a-9572-4a6d169dad97
-  title: SideHub
+  title: sidehub
   subtitle: Poor solutions to solved problems
   description: A collection of side projects
   keywords: 
@@ -49,5 +49,5 @@ site:
   options:
     favicon: logo/suricate_logo.png
     logo: logo/suricate_logo.png
-    logo_text: SideHub
+    logo_text: sidehub
     search: true
