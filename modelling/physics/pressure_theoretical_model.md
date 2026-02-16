@@ -51,7 +51,7 @@ I made this project in Desmos back in 2021. For some reason, I've always been ob
 
 # Introduction
 
-The atmosphere is a mass of air that is gravitationally bound to a planet. On Earth, phenomena as solar irradiation, water evaporation, precipitations, turbulent convective motion, Coriolis force, photochemical reactions, and many more, all contribute to the formation of a chaotic and out-of-equilibrium system that makes the modelling of the atmosphere a complex task. While we will try to be as _ab initio_ as possible, many of such factors cannot be easily modelled, and need to be implemented by means of empirical data. For example, to derive a mathematical expression of the atmospheric temperature at any given altitude is way too complex to be worth trying, and that is where measurements come in aid. Here, we will model a fictitious atmosphere at equilibrium, which implies that the net mass flux (i.e. wind) is zero at any point in space, and pressure changes (i.e. weather) do not take place. Although this is a gross simplification of our atmosphere, our model will prove to be nicely robust.
+An atmosphere is a mass of gas that is gravitationally bound to a planet. On Earth, phenomena as solar irradiation, water evaporation, precipitations, turbulent convective motion, Coriolis force, photochemical reactions, and many more, all contribute to the formation of a chaotic and out-of-equilibrium system that makes the modelling of the atmosphere a complex task. While we will try to be as _ab initio_ as possible, many of such factors cannot be easily modelled, and need to be implemented by means of empirical data. For example, to derive a mathematical expression of the atmospheric temperature at any given altitude is way too complex to be worth trying, and that is where measurements come in aid. Here, we will model a fictitious atmosphere at equilibrium, which implies that the net mass flux (i.e. wind) is zero at any point in space, and pressure changes (i.e. weather) do not take place. Although this is a gross simplification of our atmosphere, our model will prove to be nicely robust to describe how pressure changes with altitude.
 
 
 # Theoretical derivation
@@ -59,7 +59,7 @@ The atmosphere is a mass of air that is gravitationally bound to a planet. On Ea
 (heading-barometric-formula)=
 ## Atmospheric pressure at equilibrium
 
-The development of the our model necessarily starts with a description of the gas molecules. And what's a better start than the ideal gas law? This approximation actually works well with the Earth’s atmosphere, since it has sufficiently low densities and high temperatures. The equation of state of ideal gases is given by
+The development of the our model necessarily starts with a description of the gas molecules. And what's a better start than the ideal gas law? This approximation actually works well with the Earth’s atmosphere, since it has a sufficiently low density and high temperatures. The equation of state of ideal gases is given by
 
 $$
     p = \dfrac{N}{V}k_BT =  nk_BT
@@ -124,7 +124,7 @@ $$ (barometric_formula_molar)
 
 Where $M_0$ is the average molar mass of air, and $R$ is the gas constant. We used the relation $m_0/k_B = M_0/R$.
 
-THe barometric formula is already a very good estimation of the pressure profile, especially close to the surface. It considers the following approximations:
+The barometric formula is already a very good estimation of the pressure profile, especially close to the surface. It includes the following approximations:
 - Constant temperature
 - Dry air
 - Constant atmospheric composition
@@ -287,7 +287,7 @@ $$
 T_{isa}(h)= T_{isa}(h_{i}) - \Gamma_i (h-h_{i})
 $$(T_fromlapse)
 
-with $i$ the atmospheric layer in which $h$ lies, and $h_{i}$ the base altitude of the layer $i$. This however can be calculated with a simple code. Let's import the packages
+where $i$ the atmospheric layer in which $h$ lies, and $h_{i}$ the base altitude of the layer $i$. This however can be calculated with a simple code. Let's import the packages
 
 ```{code-cell} ipython
 import matplotlib.pyplot as plt
@@ -389,7 +389,7 @@ plt.show()
 :open:
 ### Sea-level pressure reduction
 
-Atmospheric pressure is always reported at the MSL. When a weather station at a certain altitude measures the local pressure, that value is then reduced to the sea level. In other words, the station must estimate the pressure that would be measured if someone digged down to the sea level. This is called **sea-level pressure reduction**, and since no air exists below ground, it is purely hypothetical, so that many assumptions need to be made. For example, how temperature and humidity would vary going down cannot be properly defined.
+The atmospheric pressure varies with altitude, thus the "raw" value read from a barometer gives no information about the weather. By convention, the pressure reported by weather stations are always at the MSL. It says that the pressure is reduced to the sea level. In other words, the station must estimate the pressure that would be measured if someone digged down to the sea level. This is called **sea-level pressure reduction**, and since no air exists below ground, it is purely hypothetical, so that many assumptions need to be made. For example, how temperature and humidity would vary going down cannot be properly defined.
 
 The sea-level pressure reduction is carried out by means of the <wiki:hypsometric_equation>:
 
@@ -421,7 +421,7 @@ $$
 \varphi = \dfrac{p_w}{p_{vap,w}}
 $$(relative_humidity)
 
-Note that these terms assume a different meaning in physics and in meteorology. In physics, the **vapor pressure** of a substance is the partial pressure of the gas phase in *equilibrium* with the liquid phase. In meteorology, however, **vapor pressure** refers to the measured partial pressure of water vapor, even when not in equilibrium, whereas the **saturation vapor pressure** is the actual vapor pressure of water, i.e., in equilibrium conditions. This nomenclature comes from the erroneous idea of air dissolving water vapor, eventually reaching a saturation limit. In reality, the vapor pressure of a substance only depends on the liquid-phase temperature, in first approximation. Here, we will try to use the correct physical definitions, albeit minding such incongruences.
+Note that these terms assume different meanings in physics and in meteorology. In physics, the **vapor pressure** of a substance is the partial pressure of the gas phase in *equilibrium* with the liquid phase. In meteorology, however, **vapor pressure** refers to the measured partial pressure of water vapor, even when not in equilibrium, whereas the **saturation vapor pressure** is the actual vapor pressure of water, i.e., in equilibrium conditions. This nomenclature comes from the erroneous idea of air dissolving water vapor, eventually reaching a saturation limit. In reality, the vapor pressure of a substance only depends on the liquid-phase temperature, in first approximation. Here, we will try to use the correct physical definitions, albeit minding such incongruences.
 
 The dependence of the vapor pressure of a substance on temperature can be estimated from the Clausius-Clapeyron equation knowing its boiling point $T_b$ at standard pressure $p^\circ$  ($p^\circ$ = 1 atm = 101325 Pa, and $T_b$ = 99.97°C for water)
 
@@ -481,7 +481,7 @@ $$
 f_{H_2O}(h) = \dfrac{p_w(h)}{p(h)} = \dfrac{\varphi(h) \cdot p_{vap,w}(T(h))}{p(h)} 
 $$(water_molar_frac)
 
-with $p(h)$ the atmospheric pressure. The average mass of a mole of humid air $m_{m}$ (subscript "m" from moist) then includes the molar mass of water $M_w$:
+with $p(h)$ the atmospheric pressure. The average mass of a mole of humid air $M_{m}$ (subscript "m" from moist) then includes the molar mass of water $M_w$:
 
 $$
 \begin{align}
@@ -492,7 +492,7 @@ $$(moist_molar_mass)
 
 Water has a smaller mass compared to the other major species in the air, therefore humidity reduces the average molar mass of a parcel of air, and makes the surface pressure smaller.
 
-Notice from {eq}`water_molar_frac` that the molar fraction of water, needed to compute the average molar mass of moist air $M_m$, depends on the atmospheric pressure itself, which is our sought variable. A solution might be use a "first-order" dry air pressure profile $p_{dry}(h)$ from the (equation {eq}`with_lapse`) instead of the real $p(h)$. 
+Notice from {eq}`water_molar_frac` that the molar fraction of water, needed to compute the average molar mass of moist air $M_m$, depends on the atmospheric pressure itself, which is our sought variable. A solution might be to use a "first-order" dry air pressure profile $p_{dry}(h)$ from the (equation {eq}`with_lapse`) instead of the real $p(h)$. 
 
 $$
 \begin{cases}
@@ -502,7 +502,7 @@ p_{dry}(h) = p_0e^{-g_0M_d/R\int_0^{h}dz/T(z)}
 \end{cases}
 $$(water_molar_frac_dry)
 
-where we allowed the relative humidity to vary with altitude. Such approximation is actually very good and must not worry us, as the fraction of water vapor in the air never exceeds 5\%, so its influence on the atmospheric pressure is very small. I was actually surprised when I discovered this. I also believed that most water is stored in clouds, but, as we will discover, it turns out not to be the case.
+where we allowed the relative humidity $\varphi(h)$ to vary with altitude. Such approximation is actually very good and must not worry us, as the fraction of water vapor in the air never exceeds 5\%, so its influence on the atmospheric pressure is very small. I was actually surprised when I discovered this. I also believed that most water is stored in clouds, but, as we will discover, it turns out not to be the case.
 
 Let's built a function to compute $f_{H_2O}$ depending on relative humidity and either temperature or altitude (in the dry air approximation). 
 
@@ -587,7 +587,7 @@ Since $(M_d - M_w) > 0$, the exponential term in equation {eq}`p_moist` is great
 
 The data avaiable from [atmospheric soundings](wiki:atmospheric_sounding) does not usually provide the relative humidity, but the **dew point** ([](#fig:sounding)). 
 
-:::{figure}https://www.greenskychaser.com/blog/wp-content/uploads/2011/05/OUN.gif
+:::{figure} https://www.greenskychaser.com/blog/wp-content/uploads/2011/05/OUN.gif
 :width: 350px
 :label: fig:sounding
 Atmospheric sounding chart showing the temperature (red line) and the dew point (green line), among other parameters, measured at different altitudes.
@@ -641,11 +641,11 @@ $$
 
 ### Clouds
 
-Clouds are aerosols of liquid droplets or crystals, which are mainly water. They form when the relative humidity reaches 100\%, or, equivalently, when the (dry-bulb) temperature reaches the dew point. The amount of water in clouds is measured by the <wiki:liquid_water_content> (LWC), which depends on the type of the cloud. Contrary to what one (me) might expect, only a tiny fraction of the cloud volume is occupied by liquid water. Typical LWC ranges within 0.03-0.45 g/m{sup}`3`, i.e. grams of liquid water per cubic meter of air, up to 3.0 g/m{sup}`3` in the fearsome cumulonimbus clouds. The specific mass $\gamma_{air,dry}$ of dry air is given by
+Clouds are aerosols of liquid droplets or crystals, mainly composed of water. They form when the relative humidity reaches 100\%, or, equivalently, when the (dry-bulb) temperature reaches the dew point. The amount of water in clouds is measured by the <wiki:liquid_water_content> (LWC), which depends on the type of the cloud. Contrary to what one (me) might expect, only a tiny fraction of the cloud volume is occupied by liquid water. Typical LWC ranges within 0.03-0.45 g/m{sup}`3`, i.e. grams of liquid water per cubic meter of air, up to 3.0 g/m{sup}`3` in the fearsome cumulonimbus clouds. The specific mass of dry air, $\gamma_{air,dry}$, is given by the ideal gas law:
 $$
 \gamma_{air,dry} = \dfrac{M_d\,p}{RT}
 $$
-At MSL, the weight of one cubic meter of dry air is 1.2 kg, which is much larger than the typical LWC. Even at the limit of the troposhere (~11 km,roughly the upper limit of clouds), where the pressure is ~230 hPa and the temperature is -56.5°C, a cubic meter of air weigths circa 360 grams. Thus, the mass fraction $w_{H_2O,clouds}$ of liquid water in clouds is at most 1\%, with 0.01-0.1\% a typical range:
+At MSL, the weight of one cubic meter of dry air is 1.2 kg, which is much larger than the typical LWC. Even at the limit of the troposhere (~11 km, roughly the upper limit of cloud formation), where the pressure is ~230 hPa and the temperature is -56.5°C, a cubic meter of air weigths circa 360 grams. Thus, the mass fraction of liquid water in clouds, $w_{H_2O,clouds}$, is at most 1\%, with 0.01-0.1\% a typical range:
 
 $$
 w_{H_2O,clouds} = \dfrac{LWC}{\gamma_{air,dry}} \sim 0.01\%-1\%
