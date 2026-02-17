@@ -4,7 +4,7 @@ authors: " "
 
 :::{image} logo/sidehub_intro.png
 :align: center
-:w: 400px
+:w: 500px
 :::
 
 > ...and to be really sure you need to have a doubt
