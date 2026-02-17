@@ -2,9 +2,9 @@
 authors: " "
 ---
 
-:::{image} logo/sidehub_logo.png
+:::{image} logo/sidehub_intro.png
 :align: center
-:w: 360px
+:w: 400px
 :::
 
 > ...and to be really sure you need to have a doubt
