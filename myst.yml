@@ -49,6 +49,6 @@ site:
   options:
     favicon: logo/suricate_logo.png
     logo: logo/suricate_logo.png
-    log_dark: logo/suricate_logo_dark.png
+    logo_dark: logo/suricate_logo_dark.png
     logo_text: sidehub
     search: true
