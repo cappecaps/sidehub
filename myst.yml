@@ -22,7 +22,7 @@ project:
         - file: modelling/physics/pressure_theoretical_model.md
         #- file: modelling/physics/pressure_empirical_model.md
         #- file: modelling/physics/sun_position.md
-        #- file: modelling/physics/UV_index.md
+        - file: modelling/physics/UV_index.md
         #- file: modelling/physics/radiation.md
         #- file: modelling/physics/color_from_spectrum.md
         #- file: modelling/physics/planet_orbits.md
