@@ -22,9 +22,4 @@ Please feel free to contact me for any feedback, suggestions, or corrections!
 %My projects are the opposite of standing on the shoulders of giants. They are like trying to build my own giant, and he's barely alive.
 %Driven by a implacable curiosity, 
 
-## Content of SideHub
-
-
-:::{toc}
-:context: project
-:::
+%## Content of SideHub

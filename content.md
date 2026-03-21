@@ -5,10 +5,10 @@ authors: ""
 
 Work in progress. 
 
-### [](modelling/physics/intro_physics.md)
+:::{toc}
+:context: section
+:::
 
-
-### [](modelling/finance/intro_finance.md)
 
 **Marco**
 
