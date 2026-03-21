@@ -8,7 +8,6 @@ Work in progress.
 :::{note}
 :::{toc}
 :context: project
-:expandable: true
 :::
 :::
 
