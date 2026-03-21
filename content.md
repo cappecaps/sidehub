@@ -5,19 +5,11 @@ authors: ""
 
 Work in progress. 
 
+:::{note}
 :::{toc}
 :context: project
+:expandable: true
 :::
-
-
-
-:::{toc}
-:context: section
-:::
-
-
-:::{toc}
-:context: children
 :::
 
 
