@@ -17,8 +17,8 @@ project:
     - file: intro.md
     - file: content.md
     #- title: Physical modelling
-    #- file: modelling/physics/intro_physics.md
-    - title: Physical modeling
+    - file: modelling/physics/intro_physics.md
+    #- title: Physical modeling
       children:
         - file: modelling/physics/pressure_theoretical_model.md
         #- file: modelling/physics/pressure_empirical_model.md

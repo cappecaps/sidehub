@@ -5,7 +5,7 @@ authors: ""
 
 Work in progress. 
 
-:::{note}
+:::{note} Sections
 :::{toc}
 :context: project
 :::
