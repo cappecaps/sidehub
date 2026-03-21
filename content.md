@@ -12,9 +12,4 @@ Work in progress.
 :::
 
 
-**Marco**
-
-
-%## Content of SideHub
-
 
