@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hobo Caps Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
+    <script>
+        const map = L.map('map').setView([51.1657, 10.4515], 5);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const colors = ['#e74c3c', '#2ecc71', '#9b59b6', '#f1c40f', '#e67e22', '#1abc9c', '#34495e'];
+
+        // Define your routes here. Update this list as you add new files to the repo.
+        const routes = [
+            { file: 'day1.gpx', mode: 'bike', day: 1 },
+            { file: 'day2.gpx', mode: 'train', day: 2 },
+            { file: 'day3.gpx', mode: 'bike', day: 3 }
+        ];
+
+        let bounds = L.latLngBounds();
+
+        routes.forEach((route, index) => {
+            const routeColor = colors[index % colors.length];
+            const dashArrayStyle = route.mode === 'train' ? '10, 10' : '';
+
+            new L.GPX(route.file, {
+                async: true,
+                polyline_options: {
+                    color: routeColor,
+                    weight: 5,
+                    opacity: 0.8,
+                    dashArray: dashArrayStyle,
+                    lineCap: 'round'
+                },
+                marker_options: {
+                    startIconUrl: null, 
+                    endIconUrl: null,
+                    shadowUrl: null
+                }
+            }).on('loaded', function(e) {
+                // Expand map bounds to fit all loaded routes
+                bounds.extend(e.target.getBounds());
+                map.fitBounds(bounds);
+                
+                const layer = e.target.getLayers()[0];
+                if (layer) {
+                    layer.bindPopup(`<b>Day ${route.day}</b><br>Mode: ${route.mode === 'train' ? 'Train' : 'Bike'}`);
+                }
+            }).addTo(map);
+        });
+
+        // Add static current position (Update these coordinates manually in the repo as you travel)
+        const currentLat = 51.9607; // Example: Latitude
+        const currentLng = 7.6261;  // Example: Longitude
+        
+        L.marker([currentLat, currentLng]).addTo(map)
+            .bindPopup('<b>Current Position</b>')
+            .openPopup();
+
+    </script>
+</body>
+</html>
