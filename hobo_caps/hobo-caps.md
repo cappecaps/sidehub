@@ -4,7 +4,6 @@ title: Hobo Caps
 
 Ciaoo
 
-```{raw} html
 <iframe 
     src="_static/maps/hobo-caps.html" 
     width="100%" 
