@@ -11,3 +11,8 @@ Ciaoo
     frameborder="0" 
     style="border: 1px solid #ccc; border-radius: 4px;">
 </iframe>
+
+
+```{iframe} _static/maps/hobo-caps.html
+:width: 100%
+:height: 600px
