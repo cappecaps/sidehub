@@ -7,7 +7,7 @@ site:
 Ciaoo
 
 <iframe 
-    src="/sidehub/maps/hobo-caps.html"  
+    src="/sidehub/public/maps/hobo-caps.html"  
     width="100%" 
     height="600px" 
     frameborder="0" 
