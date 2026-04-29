@@ -46,14 +46,14 @@
             { file: 'day1.geojson', mode: 'bike', day: 1 },
             { file: 'day2.geojson', mode: 'bike', day: 2 },
             { file: 'day3.geojson', mode: 'bike', day: 3 },
-            //{ file: 'day4.geojson', mode: 'bike', day: 4 },
+            { file: 'day4.geojson', mode: 'bike', day: 4 },
             { file: 'TrainToHellerup.geojson', mode: 'train', day: 4 },
             { file: 'day5.geojson', mode: 'bike', day: 5 },
             { file: 'day6.geojson', mode: 'bike', day: 6 },
             { file: 'day7.geojson', mode: 'bike', day: 7 },
             { file: 'day8.geojson', mode: 'bike', day: 8 },
             { file: 'day9.geojson', mode: 'bike', day: 9 },
-            //{ file: 'day10.geojson', mode: 'bike', day: 10 },
+            { file: 'day10.geojson', mode: 'bike', day: 10 },
             { file: 'TrainToMunster.geojson', mode: 'train', day: 10 },
             { file: 'day11.geojson', mode: 'bike', day: 11 }
         ];
@@ -84,16 +84,54 @@
                             };
                         },
                         onEachFeature: function (feature, layer) {
-                            // Build the popup content
                             let popupContent = `<b>Day ${route.day}</b>`;
                             
-                            // Note: Depending on the tool you use to convert the files, 
-                            // timestamps might be saved inside 'feature.properties'.
-                            // If your converter includes them, you can access them like this:
-                            // if (feature.properties && feature.properties.time) {
-                            //     popupContent += `<br><small>${feature.properties.time}</small>`;
-                            // }
-                            
+                            // 1. Calculate Distance
+                            let totalDistanceMeters = 0;
+                            if (feature.geometry.type === 'LineString') {
+                                const coords = feature.geometry.coordinates;
+                                for (let i = 0; i < coords.length - 1; i++) {
+                                    // GeoJSON is [lng, lat], Leaflet distance needs [lat, lng]
+                                    const p1 = L.latLng(coords[i][1], coords[i][0]);
+                                    const p2 = L.latLng(coords[i+1][1], coords[i+1][0]);
+                                    totalDistanceMeters += map.distance(p1, p2);
+                                }
+                            } else if (feature.geometry.type === 'MultiLineString') {
+                                const lines = feature.geometry.coordinates;
+                                lines.forEach(coords => {
+                                    for (let i = 0; i < coords.length - 1; i++) {
+                                        const p1 = L.latLng(coords[i][1], coords[i][0]);
+                                        const p2 = L.latLng(coords[i+1][1], coords[i+1][0]);
+                                        totalDistanceMeters += map.distance(p1, p2);
+                                    }
+                                });
+                            }
+
+                            if (totalDistanceMeters > 0) {
+                                const distanceKm = (totalDistanceMeters / 1000).toFixed(1);
+                                popupContent += `<br><small><b>Distance:</b> ${distanceKm} km</small>`;
+                            }
+
+                            // 2. Hunt for Time Data
+                            let startTimeStr = null;
+                            let endTimeStr = null;
+                            const timeOptions = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                            const props = feature.properties || {};
+
+                            // Look for the most common arrays converters use to store timestamps
+                            const timeArray = props.coordTimes || props.times || props.time;
+
+                            if (Array.isArray(timeArray) && timeArray.length > 0) {
+                                const start = new Date(timeArray[0]);
+                                const end = new Date(timeArray[timeArray.length - 1]);
+                                startTimeStr = start.toLocaleString(undefined, timeOptions);
+                                endTimeStr = end.toLocaleString(undefined, timeOptions);
+                            } 
+
+                            if (startTimeStr && endTimeStr && startTimeStr !== "Invalid Date") {
+                                popupContent += `<br><small><b>Start:</b> ${startTimeStr}<br><b>End:</b> ${endTimeStr}</small>`;
+                            }
+
                             layer.bindPopup(popupContent);
                         }
                     }).addTo(map);
