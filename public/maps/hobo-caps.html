@@ -26,6 +26,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/3.0.2/Control.FullScreen.min.js"></script>
 
     <script>
+        // Initialize Map and Fullscreen Control
         const map = L.map('map', {
             fullscreenControl: true,
             fullscreenControlOptions: {
@@ -37,22 +38,25 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        const colors = ['#e74c3c', '#2ecc71', '#9b59b6', '#f1c40f', '#e67e22', '#1abc9c', '#34495e'];
+        // Color definitions
+        const bikeColors = ['#ff6666', '#ff3333', '#e60000', '#b30000', '#800000']; // Shades of red
+        const trainColor = '#3366ff'; // Blue
 
-        // Define your routes here. Update this list as you add new files to the repo.
         const routes = [
             { file: 'day1.gpx', mode: 'bike', day: 1 },
             { file: 'day2.gpx', mode: 'bike', day: 2 },
             { file: 'day3.gpx', mode: 'bike', day: 3 },
-            { file: 'day4.gpx', mode: 'bike', day: 4 },
+            { file: 'day4.gpx', mode: 'train', day: 4 },
             { file: 'day5.gpx', mode: 'bike', day: 5 }
         ];
 
         let bounds = L.latLngBounds();
 
         routes.forEach((route, index) => {
-            const routeColor = colors[index % colors.length];
-            const dashArrayStyle = route.mode === 'train' ? '10, 10' : '';
+            // Assign colors based on mode
+            const isTrain = route.mode === 'train';
+            const routeColor = isTrain ? trainColor : bikeColors[index % bikeColors.length];
+            const dashArrayStyle = isTrain ? '10, 10' : '';
 
             new L.GPX(route.file, {
                 async: true,
@@ -69,25 +73,40 @@
                     shadowUrl: null
                 }
             }).on('loaded', function(e) {
-                // Expand map bounds to fit all loaded routes
                 bounds.extend(e.target.getBounds());
                 map.fitBounds(bounds);
                 
+                // Extract Start and End Times
+                const startTime = e.target.get_start_time();
+                const endTime = e.target.get_end_time();
+                
+                let timeInfo = '';
+                if (startTime && endTime) {
+                    // Format the dates (e.g., "Aug 15, 08:30")
+                    const timeOptions = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                    const startStr = startTime.toLocaleString(undefined, timeOptions);
+                    const endStr = endTime.toLocaleString(undefined, timeOptions);
+                    timeInfo = `<br><small><b>Start:</b> ${startStr}<br><b>End:</b> ${endStr}</small>`;
+                }
+
                 const layer = e.target.getLayers()[0];
                 if (layer) {
-                    layer.bindPopup(`<b>Day ${route.day}</b><br>Mode: ${route.mode === 'train' ? 'Train' : 'Bike'}`);
+                    // Bind popup without the explicit 'Mode' text
+                    layer.bindPopup(`<b>Day ${route.day}</b>${timeInfo}`);
                 }
             }).addTo(map);
         });
 
-        // Add static current position (Update these coordinates manually in the repo as you travel)
-        const currentLat = 51.9607; // Example: Latitude
-        const currentLng = 7.6261;  // Example: Longitude
+        // Add static current position
+        const currentLat = 51.9607; 
+        const currentLng = 7.6261;  
         
         L.marker([currentLat, currentLng]).addTo(map)
             .bindPopup('<b>Current Position</b>')
             .openPopup();
 
     </script>
+
+    
 </body>
 </html>
