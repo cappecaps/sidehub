@@ -39,7 +39,7 @@
         }).addTo(map);
 
         // Color definitions
-        const bikeColors = ['#ff6666', '#ff3333', '#e60000', '#b30000', '#800000']; // Shades of red
+        const bikeColors = ['#ff6666', '#ff3333', '#e60000', '#b30000', '#a20000']; // Shades of red
         const trainColor = '#3366ff'; // Blue
 
         const routes = [
@@ -102,8 +102,8 @@
         });
 
         // Add static current position
-        const currentLat = 51.9607; 
-        const currentLng = 7.6261;  
+        const currentLat = 51.419940; 
+        const currentLng = 6.883504;  
         
         L.marker([currentLat, currentLng]).addTo(map)
             .bindPopup('<b>Current Position</b>')
