@@ -38,7 +38,7 @@
         }).addTo(map);
 
         // Color definitions
-        const bikeColors = ['#ff6666', '#ff3333', '#e60000', '#b30000', '#a20000']; 
+        const bikeColors = ['#ff7777', '#ff4444', '#e62222', '#b31111', '#a80000']; 
         const trainColor = '#3366ff'; 
 
         // Make sure these match your new file names exactly
@@ -70,7 +70,7 @@
                 .then(data => {
                     const isTrain = route.mode === 'train';
                     const routeColor = isTrain ? trainColor : bikeColors[index % bikeColors.length];
-                    const dashArrayStyle = isTrain ? '10, 10' : '';
+                    const dashArrayStyle = isTrain ? '5, 5' : '';
 
                     // Add the GeoJSON data to the map
                     const geoJsonLayer = L.geoJSON(data, {
