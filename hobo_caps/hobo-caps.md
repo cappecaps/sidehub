@@ -1,5 +1,7 @@
 ---
 title: Hobo Caps
+site:
+  hide_footer_links: true
 ---
 
 Ciaoo
