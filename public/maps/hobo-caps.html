@@ -109,14 +109,14 @@
 
                     const isTrain = route.mode === 'train';
                     const routeColor = isTrain ? trainColor : bikeColors[index % bikeColors.length];
-                    const dashArrayStyle = isTrain ? '10, 10' : '';
+                    const dashArrayStyle = isTrain ? '5, 5' : '';
 
                     // Add the GeoJSON data to the map
                     const geoJsonLayer = L.geoJSON(data, {
                         style: function (feature) {
                             return {
                                 color: routeColor,
-                                weight: 6,
+                                weight: 7,
                                 opacity: 0.8,
                                 dashArray: dashArrayStyle,
                                 lineCap: 'round'
