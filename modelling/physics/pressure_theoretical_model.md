@@ -589,7 +589,7 @@ The data avaiable from [atmospheric soundings](wiki:atmospheric_sounding) does n
 
 
 
-:::{figure} MISSING FIG
+:::{figure} https://www.cs.ubc.ca/~tmm/courses/cpsc533c-06-fall/projects/sancho/proposal/images/Skew-T-Plotted.gif
 :width: 350px
 :label: fig:sounding
 Atmospheric sounding chart showing the temperature (red line) and the dew point (green line), among other parameters, measured at different altitudes.
