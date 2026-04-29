@@ -153,8 +153,16 @@
         const currentLat = 51.420; 
         const currentLng = 6.884;  
         
+        // Define the HTML for the popup, including the image
+        const popupHTML = `
+            <div style="text-align: center;">
+                <b>Current Position</b><br>
+                <img src="/sidehub/images/propic.jpg" alt="Current view" style="width: 100px; border-radius: 8px; margin-top: 5px;">
+            </div>
+        `;
+
         L.marker([currentLat, currentLng]).addTo(map)
-            .bindPopup('<b>Current Position</b>')
+            .bindPopup(popupHTML)
             .openPopup();
 
     </script>
