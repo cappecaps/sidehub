@@ -587,7 +587,9 @@ Since $(M_d - M_w) > 0$, the exponential term in equation {eq}`p_moist` is great
 
 The data avaiable from [atmospheric soundings](wiki:atmospheric_sounding) does not usually provide the relative humidity, but the **dew point** ([](#fig:sounding)). 
 
-:::{figure} https://www.greenskychaser.com/blog/wp-content/uploads/2011/05/OUN.gif
+
+
+:::{figure} MISSING FIG
 :width: 350px
 :label: fig:sounding
 Atmospheric sounding chart showing the temperature (red line) and the dew point (green line), among other parameters, measured at different altitudes.
