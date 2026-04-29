@@ -4,115 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hobo Caps Map</title>
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/3.0.2/Control.FullScreen.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.fullscreen@3.1.4/Control.FullScreen.css" />
+    
     <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-    #map {
-        height: 100%;
-        width: 100%;
-    }
-</style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/3.0.2/Control.FullScreen.min.js"></script>
+    <script src="https://unpkg.com/leaflet.fullscreen@3.1.4/Control.FullScreen.min.js"></script>
 
     <script>
         // Initialize Map and Fullscreen Control
         const map = L.map('map', {
             fullscreenControl: true,
-            fullscreenControlOptions: {
-                position: 'topleft'
-            }
-        }).setView([51.834,6.065], 4);
+            fullscreenControlOptions: { position: 'topleft' }
+        }).setView([51.1657, 10.4515], 5);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
         // Color definitions
-        const bikeColors = ['#ff6666', '#ff3333', '#e60000', '#b30000', '#a20000']; // Shades of red
-        const trainColor = '#3366ff'; // Blue
+        const bikeColors = ['#ff6666', '#ff3333', '#e60000', '#b30000', '#a20000']; 
+        const trainColor = '#3366ff'; 
 
+        // Make sure these match your new file names exactly
         const routes = [
-            { file: 'day1.gpx', mode: 'bike', day: 1 },
-            { file: 'day2.gpx', mode: 'bike', day: 2 },
-            { file: 'day3.gpx', mode: 'bike', day: 3 },
-            { file: 'day4.gpx', mode: 'bike', day: 4 },
-            { file: 'day5.gpx', mode: 'bike', day: 5 },
-            { file: 'day6.gpx', mode: 'bike', day: 6 },
-            { file: 'day7.gpx', mode: 'bike', day: 7 },
-            { file: 'day8.gpx', mode: 'bike', day: 8 },
-            { file: 'day9.gpx', mode: 'bike', day: 9 },
-            { file: 'day10.gpx', mode: 'bike', day: 10 },
-            { file: 'day11.gpx', mode: 'bike', day: 11 }
+            { file: 'day1.geojson', mode: 'bike', day: 1 },
+            { file: 'day2.geojson', mode: 'bike', day: 2 },
+            { file: 'day3.geojson', mode: 'bike', day: 3 },
+            { file: 'day4.geojson', mode: 'bike', day: 4 },
+            { file: 'day5.geojson', mode: 'bike', day: 5 },
+            { file: 'day6.geojson', mode: 'bike', day: 6 },
+            { file: 'day7.geojson', mode: 'bike', day: 7 },
+            { file: 'day8.geojson', mode: 'bike', day: 8 },
+            { file: 'day9.geojson', mode: 'bike', day: 9 },
+            { file: 'day10.geojson', mode: 'bike', day: 10 },
+            { file: 'day11.geojson', mode: 'bike', day: 11 }
         ];
 
         let bounds = L.latLngBounds();
 
-        routes.forEach((route, index) => {
-            // Assign colors based on mode
-            const isTrain = route.mode === 'train';
-            const routeColor = isTrain ? trainColor : bikeColors[index % bikeColors.length];
-            const dashArrayStyle = isTrain ? '10, 10' : '';
+        // Array to hold all our fetch promises so we know when everything is done loading
+        const routePromises = routes.map((route, index) => {
+            return fetch(route.file)
+                .then(response => {
+                    if (!response.ok) throw new Error(`Could not load ${route.file}`);
+                    return response.json();
+                })
+                .then(data => {
+                    const isTrain = route.mode === 'train';
+                    const routeColor = isTrain ? trainColor : bikeColors[index % bikeColors.length];
+                    const dashArrayStyle = isTrain ? '10, 10' : '';
 
-            new L.GPX(route.file, {
-                async: true,
-                polyline_options: {
-                    color: routeColor,
-                    weight: 5,
-                    opacity: 0.8,
-                    dashArray: dashArrayStyle,
-                    lineCap: 'round'
-                },
-                marker_options: {
-                    startIconUrl: null, 
-                    endIconUrl: null,
-                    shadowUrl: null
-                }
-            }).on('loaded', function(e) {
-                bounds.extend(e.target.getBounds());
+                    // Add the GeoJSON data to the map
+                    const geoJsonLayer = L.geoJSON(data, {
+                        style: function (feature) {
+                            return {
+                                color: routeColor,
+                                weight: 5,
+                                opacity: 0.8,
+                                dashArray: dashArrayStyle,
+                                lineCap: 'round'
+                            };
+                        },
+                        onEachFeature: function (feature, layer) {
+                            // Build the popup content
+                            let popupContent = `<b>Day ${route.day}</b>`;
+                            
+                            // Note: Depending on the tool you use to convert the files, 
+                            // timestamps might be saved inside 'feature.properties'.
+                            // If your converter includes them, you can access them like this:
+                            // if (feature.properties && feature.properties.time) {
+                            //     popupContent += `<br><small>${feature.properties.time}</small>`;
+                            // }
+                            
+                            layer.bindPopup(popupContent);
+                        }
+                    }).addTo(map);
+
+                    // Expand the map boundaries to include this new route
+                    bounds.extend(geoJsonLayer.getBounds());
+                })
+                .catch(error => console.error(error));
+        });
+
+        // Once all files are fetched and drawn, zoom the map to fit them all
+        Promise.all(routePromises).then(() => {
+            if (bounds.isValid()) {
                 map.fitBounds(bounds);
-                
-                // Extract Start and End Times
-                const startTime = e.target.get_start_time();
-                const endTime = e.target.get_end_time();
-                
-                let timeInfo = '';
-                if (startTime && endTime) {
-                    // Format the dates (e.g., "Aug 15, 08:30")
-                    const timeOptions = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-                    const startStr = startTime.toLocaleString(undefined, timeOptions);
-                    const endStr = endTime.toLocaleString(undefined, timeOptions);
-                    timeInfo = `<br><small><b>Start:</b> ${startStr}<br><b>End:</b> ${endStr}</small>`;
-                }
-
-                const layer = e.target.getLayers()[0];
-                if (layer) {
-                    // Bind popup without the explicit 'Mode' text
-                    layer.bindPopup(`<b>Day ${route.day}</b>${timeInfo}`);
-                }
-            }).addTo(map);
+            }
         });
 
         // Add static current position
-        const currentLat = 51.419940; 
-        const currentLng = 6.883504;  
+        const currentLat = 51.420; 
+        const currentLng = 6.884;  
         
         L.marker([currentLat, currentLng]).addTo(map)
             .bindPopup('<b>Current Position</b>')
             .openPopup();
 
     </script>
-
-    
 </body>
 </html>
