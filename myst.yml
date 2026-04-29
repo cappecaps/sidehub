@@ -54,3 +54,4 @@ site:
     logo_dark: logo/suricate_logo_dark.png
     logo_text: sidehub
     search: true
+    hide_footer_links: true
