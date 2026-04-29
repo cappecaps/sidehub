@@ -47,7 +47,7 @@ project:
       template: lapreprint-typst
       articles: intro.md
 site:
-  template: default #book-theme
+  template: book-theme
   options:
     favicon: logo/suricate_logo.png
     logo: logo/suricate_logo.png
