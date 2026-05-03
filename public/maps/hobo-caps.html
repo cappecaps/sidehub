@@ -93,9 +93,9 @@
                 })
                 .then(data => {
                     // --- JUMP-CUTTER LOGIC ---
-                    // If distance between two points is > 3000 meters (3km), cut the line.
+                    // If distance between two points is > 6000 meters (6km), cut the line.
                     // You can adjust this number if you have smaller train jumps.
-                    const jumpThreshold = 3000; 
+                    const jumpThreshold = 6000; 
 
                     const splitLine = (coords) => {
                         let segments = [];
