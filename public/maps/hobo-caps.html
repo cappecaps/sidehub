@@ -213,11 +213,11 @@
         const currentLat = 50.8786;
         const currentLng = 4.70115;  
         
-        const popupHTML = `
-            <div style="text-align: center;">
-                <img src="icon.webp" alt="Current view" style="width: 50px; border-radius: 2px; margin-top: 1px;">
-            </div>
-        `;
+        //const popupHTML = `
+        //    <div style="text-align: center;">
+         //       <img src="icon.webp" alt="Current view" style="width: 50px; border-radius: 2px; margin-top: 1px;">
+        //    </div>
+        //`;
 
         L.marker([currentLat, currentLng]).addTo(map)
             .bindPopup(popupHTML)
