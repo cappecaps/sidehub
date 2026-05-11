@@ -58,7 +58,9 @@
         const bikeColor = '#e60000'; 
         const trainColor = '#3366ff'; 
 
-        // 5. Manual Routes List (Dates start Apr 15 and are strictly consecutive)
+        // 5. Manual Routes List 
+        // Add "distance: XX" to display your true recorded distance. 
+        // If left off, the script will calculate it automatically based on the GeoJSON dots.
         const routes = [
             { file: 'day1.geojson', mode: 'bike', day: 1, date: 'Apr 15' },
             { file: 'day2.geojson', mode: 'bike', day: 2, date: 'Apr 16' },
@@ -94,7 +96,8 @@
                 })
                 .then(data => {
                     // --- JUMP-CUTTER LOGIC ---
-                    const jumpThreshold = 3000; 
+                    // Increased to 15000 meters (15km) to prevent false-cuts on simplified straight roads
+                    const jumpThreshold = 15000; 
 
                     const splitLine = (coords) => {
                         let segments = [];
@@ -146,29 +149,33 @@
                         onEachFeature: function (feature, layer) {
                             let popupContent = `<b>Day ${route.day}</b><br><small><b>Date:</b> ${route.date}</small>`;
                             
-                            // Distance Calc
-                            let totalDistanceMeters = 0;
-                            if (feature.geometry.type === 'LineString') {
-                                const coords = feature.geometry.coordinates;
-                                for (let i = 0; i < coords.length - 1; i++) {
-                                    const p1 = L.latLng(coords[i][1], coords[i][0]);
-                                    const p2 = L.latLng(coords[i+1][1], coords[i+1][0]);
-                                    totalDistanceMeters += map.distance(p1, p2);
-                                }
-                            } else if (feature.geometry.type === 'MultiLineString') {
-                                const lines = feature.geometry.coordinates;
-                                lines.forEach(coords => {
+                            // Distance Calc (Use hardcoded if available, else calculate)
+                            if (route.distance) {
+                                popupContent += `<br><small><b>Distance:</b> ${route.distance} km</small>`;
+                            } else {
+                                let totalDistanceMeters = 0;
+                                if (feature.geometry.type === 'LineString') {
+                                    const coords = feature.geometry.coordinates;
                                     for (let i = 0; i < coords.length - 1; i++) {
                                         const p1 = L.latLng(coords[i][1], coords[i][0]);
                                         const p2 = L.latLng(coords[i+1][1], coords[i+1][0]);
                                         totalDistanceMeters += map.distance(p1, p2);
                                     }
-                                });
-                            }
+                                } else if (feature.geometry.type === 'MultiLineString') {
+                                    const lines = feature.geometry.coordinates;
+                                    lines.forEach(coords => {
+                                        for (let i = 0; i < coords.length - 1; i++) {
+                                            const p1 = L.latLng(coords[i][1], coords[i][0]);
+                                            const p2 = L.latLng(coords[i+1][1], coords[i+1][0]);
+                                            totalDistanceMeters += map.distance(p1, p2);
+                                        }
+                                    });
+                                }
 
-                            if (totalDistanceMeters > 0) {
-                                const distanceKm = (totalDistanceMeters / 1000).toFixed(1);
-                                popupContent += `<br><small><b>Distance:</b> ${distanceKm} km</small>`;
+                                if (totalDistanceMeters > 0) {
+                                    const distanceKm = (totalDistanceMeters / 1000).toFixed(1);
+                                    popupContent += `<br><small><b>Distance:</b> ~${distanceKm} km</small>`;
+                                }
                             }
 
                             layer.bindPopup(popupContent);
