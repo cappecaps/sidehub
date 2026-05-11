@@ -6,9 +6,8 @@
     <title>Hobo Caps Map</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/3.0.2/Control.FullScreen.min.css" />
-
     
     <style>
         html, body {
@@ -26,12 +25,11 @@
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/3.0.2/Control.FullScreen.min.js"></script>
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/3.0.2/Control.FullScreen.min.js"></script>
 
     <script>
-        // Initialize Map and Fullscreen Control
-        // 1. Define your map styles (Base Layers)
+        // 1. Define your map styles
         const standardMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
@@ -42,11 +40,11 @@
             attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a>'
         });
 
-        // 2. Initialize the Map and set the DEFAULT layer
+        // 2. Initialize the Map
         const map = L.map('map', {
             fullscreenControl: true,
             fullscreenControlOptions: { position: 'topleft' },
-            layers: [standardMap] // <--- Change this to topoMap if you want Topo to load first
+            layers: [standardMap] 
         }).setView([51.1657, 10.4515], 5);
 
         // 3. Create the Layer Control menu
@@ -54,44 +52,41 @@
             "Standard Map": standardMap,
             "Topographic Map": topoMap
         };
-
-        // Add the menu to the map
         L.control.layers(baseMaps).addTo(map);
 
-        // Color definitions
-        const bikeColors = ['#ff7777', '#ff4444', '#e62222', '#b31111', '#a00000']; 
-        const trainColor = '#3355dd'; 
+        // 4. Colors (Single red, single blue)
+        const bikeColor = '#e60000'; 
+        const trainColor = '#3366ff'; 
 
-        // Make sure these match your new file names exactly
+        // 5. Manual Routes List (Dates start Apr 15 and are strictly consecutive)
         const routes = [
-            { file: 'day1.geojson', mode: 'bike', day: 1 },
-            { file: 'day2.geojson', mode: 'bike', day: 2 },
-            { file: 'day3.geojson', mode: 'bike', day: 3 },
-            { file: 'day4.geojson', mode: 'bike', day: 4 },
-            { file: 'TrainToHellerup.geojson', mode: 'train', day: 4 },
-            { file: 'day5.geojson', mode: 'bike', day: 5 },
-            { file: 'day6.geojson', mode: 'bike', day: 6 },
-            { file: 'day7.geojson', mode: 'bike', day: 7 },
-            { file: 'day8.geojson', mode: 'bike', day: 8 },
-            { file: 'day9.geojson', mode: 'bike', day: 9 },
-            { file: 'day10.geojson', mode: 'bike', day: 10 },
-            { file: 'TrainToMunster.geojson', mode: 'train', day: 10 },
-            { file: 'day11.geojson', mode: 'bike', day: 11 },
-            { file: 'day12.geojson', mode: 'bike', day: 12 },
-            { file: 'day13.geojson', mode: 'bike', day: 13 },
-            { file: 'day14.geojson', mode: 'bike', day: 14 },
-            { file: 'daynull.geojson', mode: 'bike', day: null },
-            { file: 'day15.geojson', mode: 'bike', day: 15 },
-            { file: 'day16.geojson', mode: 'bike', day: 16 },
-            { file: 'day17.geojson', mode: 'bike', day: 17 },
-            { file: 'day18.geojson', mode: 'bike', day: 18 },
-            { file: 'day19.geojson', mode: 'bike', day: 19 }
+            { file: 'day1.geojson', mode: 'bike', day: 1, date: 'Apr 15' },
+            { file: 'day2.geojson', mode: 'bike', day: 2, date: 'Apr 16' },
+            { file: 'day3.geojson', mode: 'bike', day: 3, date: 'Apr 17' },
+            { file: 'day4.geojson', mode: 'bike', day: 4, date: 'Apr 18' },
+            { file: 'TrainToHellerup.geojson', mode: 'train', day: 4, date: 'Apr 18' },
+            { file: 'day5.geojson', mode: 'bike', day: 5, date: 'Apr 20' }, 
+            { file: 'day6.geojson', mode: 'bike', day: 6, date: 'Apr 21' },
+            { file: 'day7.geojson', mode: 'bike', day: 7, date: 'Apr 22' },
+            { file: 'day8.geojson', mode: 'bike', day: 8, date: 'Apr 23' },
+            { file: 'day9.geojson', mode: 'bike', day: 9, date: 'Apr 24' },
+            { file: 'day10.geojson', mode: 'bike', day: 10, date: 'Apr 25' },
+            { file: 'TrainToMunster.geojson', mode: 'train', day: 10, date: 'Apr 25' },
+            { file: 'day11.geojson', mode: 'bike', day: 11, date: 'Apr 28' },
+            { file: 'day12.geojson', mode: 'bike', day: 12, date: 'Apr 30' },
+            { file: 'day13.geojson', mode: 'bike', day: 13, date: 'May 01' },
+            { file: 'day14.geojson', mode: 'bike', day: 14, date: 'May 02' },
+            { file: 'day15.geojson', mode: 'bike', day: 15, date: 'May 05' },
+            { file: 'day16.geojson', mode: 'bike', day: 16, date: 'May 06' },
+            { file: 'day17.geojson', mode: 'bike', day: 17, date: 'May 07' },
+            { file: 'day18.geojson', mode: 'bike', day: 18, date: 'May 09' },
+            { file: 'day19.geojson', mode: 'bike', day: 19, date: 'May 10' }
         ];
 
         let bounds = L.latLngBounds();
 
-        // Array to hold all our fetch promises so we know when everything is done loading
-        const routePromises = routes.map((route, index) => {
+        // 6. Data Fetch, Jump-Cutter, and Drawing
+        const routePromises = routes.map((route) => {
             return fetch(route.file)
                 .then(response => {
                     if (!response.ok) throw new Error(`Could not load ${route.file}`);
@@ -99,9 +94,7 @@
                 })
                 .then(data => {
                     // --- JUMP-CUTTER LOGIC ---
-                    // If distance between two points is > 6000 meters (6km), cut the line.
-                    // You can adjust this number if you have smaller train jumps.
-                    const jumpThreshold = 6000; 
+                    const jumpThreshold = 3000; 
 
                     const splitLine = (coords) => {
                         let segments = [];
@@ -111,7 +104,7 @@
                             const p2 = L.latLng(coords[i][1], coords[i][0]);
                             if (map.distance(p1, p2) > jumpThreshold) {
                                 if (currentSegment.length > 1) segments.push(currentSegment);
-                                currentSegment = [coords[i]]; // Start new segment
+                                currentSegment = [coords[i]]; 
                             } else {
                                 currentSegment.push(coords[i]);
                             }
@@ -134,27 +127,26 @@
                             }
                         });
                     }
-                    // --- END JUMP-CUTTER LOGIC ---
 
                     const isTrain = route.mode === 'train';
-                    const routeColor = isTrain ? trainColor : bikeColors[index % bikeColors.length];
-                    const dashArrayStyle = isTrain ? '4, 8' : '';
+                    const routeColor = isTrain ? trainColor : bikeColor;
+                    const dashArrayStyle = isTrain ? '10, 10' : '';
 
-                    // Add the GeoJSON data to the map
+                    // 7. Draw Lines and Build Popups
                     const geoJsonLayer = L.geoJSON(data, {
                         style: function (feature) {
                             return {
                                 color: routeColor,
-                                weight: 7,
+                                weight: 6,
                                 opacity: 0.8,
                                 dashArray: dashArrayStyle,
                                 lineCap: 'round'
                             };
                         },
                         onEachFeature: function (feature, layer) {
-                            let popupContent = `<b>Day ${route.day}</b>`;
+                            let popupContent = `<b>Day ${route.day}</b><br><small><b>Date:</b> ${route.date}</small>`;
                             
-                            // 1. Calculate Distance
+                            // Distance Calc
                             let totalDistanceMeters = 0;
                             if (feature.geometry.type === 'LineString') {
                                 const coords = feature.geometry.coordinates;
@@ -179,58 +171,46 @@
                                 popupContent += `<br><small><b>Distance:</b> ${distanceKm} km</small>`;
                             }
 
-                            // 2. Hunt for Time Data
-                            let startTimeStr = null;
-                            let endTimeStr = null;
-                            const timeOptions = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-                            const props = feature.properties || {};
-
-                            const timeArray = props.coordTimes || props.times || props.time;
-
-                            if (Array.isArray(timeArray) && timeArray.length > 0) {
-                                const start = new Date(timeArray[0]);
-                                const end = new Date(timeArray[timeArray.length - 1]);
-                                startTimeStr = start.toLocaleString(undefined, timeOptions);
-                                endTimeStr = end.toLocaleString(undefined, timeOptions);
-                            } 
-
-                            if (startTimeStr && endTimeStr && startTimeStr !== "Invalid Date") {
-                                popupContent += `<br><small><b>Start:</b> ${startTimeStr}<br><b>End:</b> ${endTimeStr}</small>`;
-                            }
-
                             layer.bindPopup(popupContent);
                         }
                     }).addTo(map);
 
-                    // Expand the map boundaries to include this new route
                     bounds.extend(geoJsonLayer.getBounds());
+
+                    // 8. Add Start and End Circles
+                    if (data.features && data.features.length > 0) {
+                        const firstFeature = data.features[0];
+                        const lastFeature = data.features[data.features.length - 1];
+
+                        const firstLine = firstFeature.geometry.type === 'LineString' ? firstFeature.geometry.coordinates : firstFeature.geometry.coordinates[0];
+                        const lastLine = lastFeature.geometry.type === 'LineString' ? lastFeature.geometry.coordinates : lastFeature.geometry.coordinates[lastFeature.geometry.coordinates.length - 1];
+
+                        const startCoord = firstLine[0];
+                        const endCoord = lastLine[lastLine.length - 1];
+
+                        const circleStyle = {
+                            radius: 4,
+                            fillColor: routeColor, 
+                            color: "#ffffff",      
+                            weight: 2,
+                            opacity: 1,
+                            fillOpacity: 1
+                        };
+
+                        L.circleMarker([startCoord[1], startCoord[0]], circleStyle).addTo(map).bindPopup(`<b>Start Day ${route.day}</b>`);
+                        L.circleMarker([endCoord[1], endCoord[0]], circleStyle).addTo(map).bindPopup(`<b>End Day ${route.day}</b>`);
+                    }
+
                 })
                 .catch(error => console.error(error));
         });
 
-        // Once all files are fetched and drawn, zoom the map to fit them all
         Promise.all(routePromises).then(() => {
             if (bounds.isValid()) {
                 map.fitBounds(bounds);
             }
         });
 
-        // Add static current position
-        const currentLat = 49.117287; 
-        const currentLng = 6.176265;  
-        
-        //const popupHTML = `
-        //    <div style="text-align: center;">
-         //       <img src="icon.webp" alt="Current view" style="width: 50px; border-radius: 2px; margin-top: 1px;">
-        //    </div>
-        //`;
-
-        //L.marker([currentLat, currentLng]).addTo(map)
-         //   .bindPopup(popupHTML)
-         //   .openPopup();
-
     </script>
-
-    
 </body>
 </html>
