@@ -54,7 +54,7 @@
         };
         L.control.layers(baseMaps).addTo(map);
 
-        // 4. Colors (Single red, single blue)
+        // 4. Colors
         const bikeColor = '#e60000'; 
         const trainColor = '#3366ff'; 
 
@@ -85,7 +85,6 @@
             { file: 'day21.geojson', mode: 'bike', day: 21, date: 'May 13' },
             { file: 'day22.geojson', mode: 'bike', day: 22, date: 'May 15' },
             { file: 'day23.geojson', mode: 'bike', day: 23, date: 'May 16' }
-            
         ];
 
         let bounds = L.latLngBounds();
@@ -137,7 +136,11 @@
                     const routeColor = isTrain ? trainColor : bikeColor;
                     const dashArrayStyle = isTrain ? '10, 10' : '';
 
-                    // 7. Draw Lines and Build Popups
+                    let routeDistanceMeters = 0;
+                    let routeAscent = 0;
+                    let routeDescent = 0;
+
+                    // 7. Draw Lines and Calculate Metrics
                     const geoJsonLayer = L.geoJSON(data, {
                         style: function (feature) {
                             return {
@@ -149,34 +152,39 @@
                             };
                         },
                         onEachFeature: function (feature, layer) {
-                            let popupContent = `<b>Day ${route.day}</b><br><small><b>Date:</b> ${route.date}</small>`;
-                            
-                            // Distance Calc
-                            let totalDistanceMeters = 0;
                             if (feature.geometry.type === 'LineString') {
                                 const coords = feature.geometry.coordinates;
                                 for (let i = 0; i < coords.length - 1; i++) {
+                                    // Distance
                                     const p1 = L.latLng(coords[i][1], coords[i][0]);
                                     const p2 = L.latLng(coords[i+1][1], coords[i+1][0]);
-                                    totalDistanceMeters += map.distance(p1, p2);
+                                    routeDistanceMeters += map.distance(p1, p2);
+                                    
+                                    // Elevation (GeoJSON format is [lng, lat, elevation])
+                                    if (coords[i].length > 2 && coords[i+1].length > 2) {
+                                        let eleDiff = coords[i+1][2] - coords[i][2];
+                                        if (eleDiff > 0) routeAscent += eleDiff;
+                                        else if (eleDiff < 0) routeDescent += Math.abs(eleDiff);
+                                    }
                                 }
                             } else if (feature.geometry.type === 'MultiLineString') {
                                 const lines = feature.geometry.coordinates;
                                 lines.forEach(coords => {
                                     for (let i = 0; i < coords.length - 1; i++) {
+                                        // Distance
                                         const p1 = L.latLng(coords[i][1], coords[i][0]);
                                         const p2 = L.latLng(coords[i+1][1], coords[i+1][0]);
-                                        totalDistanceMeters += map.distance(p1, p2);
+                                        routeDistanceMeters += map.distance(p1, p2);
+                                        
+                                        // Elevation
+                                        if (coords[i].length > 2 && coords[i+1].length > 2) {
+                                            let eleDiff = coords[i+1][2] - coords[i][2];
+                                            if (eleDiff > 0) routeAscent += eleDiff;
+                                            else if (eleDiff < 0) routeDescent += Math.abs(eleDiff);
+                                        }
                                     }
                                 });
                             }
-
-                            if (totalDistanceMeters > 0) {
-                                const distanceKm = (totalDistanceMeters / 1000).toFixed(1);
-                                popupContent += `<br><small><b>Distance:</b> ${distanceKm} km</small>`;
-                            }
-
-                            layer.bindPopup(popupContent);
                         }
                     }).addTo(map);
 
@@ -206,14 +214,52 @@
                         L.circleMarker([endCoord[1], endCoord[0]], circleStyle).addTo(map).bindPopup(`<b>End Day ${route.day}</b>`);
                     }
 
+                    // Return the layer and data so we can build the popups chronologically
+                    return {
+                        route: route,
+                        layer: geoJsonLayer,
+                        distance: routeDistanceMeters / 1000,
+                        ascent: routeAscent,
+                        descent: routeDescent
+                    };
                 })
                 .catch(error => console.error(error));
         });
 
-        Promise.all(routePromises).then(() => {
+        // 9. Build Popups and Calculate Cumulative Distance
+        Promise.all(routePromises).then((results) => {
+            // Remove any failed fetches before processing
+            const validResults = results.filter(item => item !== undefined);
+
             if (bounds.isValid()) {
                 map.fitBounds(bounds);
             }
+
+            // Sort by day to ensure the cumulative calculation is correct
+            validResults.sort((a, b) => a.route.day - b.route.day);
+
+            let cumulativeDistance = 0;
+
+            validResults.forEach(item => {
+                // Only add biking distances to the cumulative total
+                if (item.route.mode === 'bike') {
+                    cumulativeDistance += item.distance;
+                }
+
+                let popupContent = `<b>Day ${item.route.day}</b><br><small><b>Date:</b> ${item.route.date}</small>`;
+                popupContent += `<br><small><b>Distance:</b> ${item.distance.toFixed(1)} km</small>`;
+                
+                // Only display Ascent/Descent if the GeoJSON has 3D coordinates
+                if (item.ascent > 0 || item.descent > 0) {
+                    popupContent += `<br><small><b>Ascent:</b> ${Math.round(item.ascent)} m</small>`;
+                    popupContent += `<br><small><b>Descent:</b> ${Math.round(item.descent)} m</small>`;
+                }
+                
+                popupContent += `<br><small><b>Total distance:</b> ${cumulativeDistance.toFixed(1)} km</small>`;
+
+                // Bind the completed popup to the line
+                item.layer.bindPopup(popupContent);
+            });
         });
 
     </script>
