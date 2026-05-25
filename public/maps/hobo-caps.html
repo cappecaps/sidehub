@@ -261,9 +261,6 @@
                     if (item.route.title) {
                         popupContent += `<br><b>${item.route.title}</b>`;
                     }
-                    if (item.route.vote) {
-                        popupContent += `<br><small><b>Vote:</b> ${item.route.vote}</small>`;
-                    }
 
                     popupContent += `<br><small><b>Date:</b> ${item.route.date}</small>`;
                     popupContent += `<br><small><b>Distance:</b> ${item.distance.toFixed(1)} km</small>`;
@@ -271,6 +268,10 @@
                     if (item.ascent > 0 || item.descent > 0) {
                         popupContent += `<br><small><b>Ascent:</b> ${Math.round(item.ascent)} m</small>`;
                         popupContent += `<br><small><b>Descent:</b> ${Math.round(item.descent)} m</small>`;
+                    }
+
+                    if (item.route.vote) {
+                        popupContent += `<br><small><b>Vote:</b> ${item.route.vote}</small>`;
                     }
                     
                     popupContent += `<hr style="margin: 6px 0; border: 0; border-top: 1px solid #ccc;">`;
