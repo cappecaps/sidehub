@@ -1,10 +1,15 @@
 ---
 title: Hobo Caps
+subtitle: The least insane thing someone can do after a PhD
 site:
   hide_footer_links: true
 ---
 
-Ciaoo
+
+
+### Legend
+Red: Bike route
+Blue: Trains
 
 
 <iframe 
