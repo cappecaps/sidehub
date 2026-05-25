@@ -55,8 +55,9 @@
         L.control.layers(baseMaps).addTo(map);
 
         // 4. Colors
-        const bikeColor = '#e60000'; 
-        const trainColor = '#3366ff'; 
+        const bikeColor = '#e20000'; 
+        const trainColor = '#b5b5b5'; 
+        const boatColor = '#3366ff'; 
 
         // 5. Manual Routes List
         const routes = [
@@ -64,10 +65,12 @@
             { file: 'day2.geojson', mode: 'bike', day: 2, date: 'Apr 16', title: '', vote: '' },
             { file: 'day3.geojson', mode: 'bike', day: 3, date: 'Apr 17', title: '', vote: '' },
             { file: 'day4.geojson', mode: 'bike', day: 4, date: 'Apr 18', title: '', vote: '' },
+            { file: 'BoatToHelsingor.geojson', mode: 'boat', day: 4, date: 'Apr 18' },
             { file: 'TrainToHellerup.geojson', mode: 'train', day: 4, date: 'Apr 18' },
             { file: 'day5.geojson', mode: 'bike', day: 5, date: 'Apr 20', title: '', vote: '8' }, 
             { file: 'day6.geojson', mode: 'bike', day: 6, date: 'Apr 21', title: 'Ride in the original Zealand', vote: '9' },
             { file: 'day7.geojson', mode: 'bike', day: 7, date: 'Apr 22', title: 'In German territory', vote: '8' },
+            { file: 'BoatToMarienleuchte.geojson', mode: 'boat', day: 7, date: 'Apr 22' },
             { file: 'day8.geojson', mode: 'bike', day: 8, date: 'Apr 23', title: 'Stoicism maxxing to Hamburg', vote: '8' },
             { file: 'day9.geojson', mode: 'bike', day: 9, date: 'Apr 24', title: 'Riding on my last straw', vote: '2' },
             { file: 'day10.geojson', mode: 'bike', day: 10, date: 'Apr 25', title: 'Chilling in the nothingness', vote: '6.5' },
