@@ -58,39 +58,39 @@
         const bikeColor = '#e60000'; 
         const trainColor = '#3366ff'; 
 
-        // 5. Manual Routes List 
+        // 5. Manual Routes List (Added title and vote properties)
         const routes = [
-            { file: 'day1.geojson', mode: 'bike', day: 1, date: 'Apr 15' },
-            { file: 'day2.geojson', mode: 'bike', day: 2, date: 'Apr 16' },
-            { file: 'day3.geojson', mode: 'bike', day: 3, date: 'Apr 17' },
-            { file: 'day4.geojson', mode: 'bike', day: 4, date: 'Apr 18' },
+            { file: 'day1.geojson', mode: 'bike', day: 1, date: 'Apr 15', title: '', vote: '' },
+            { file: 'day2.geojson', mode: 'bike', day: 2, date: 'Apr 16', title: '', vote: '' },
+            { file: 'day3.geojson', mode: 'bike', day: 3, date: 'Apr 17', title: '', vote: '' },
+            { file: 'day4.geojson', mode: 'bike', day: 4, date: 'Apr 18', title: '', vote: '' },
             { file: 'TrainToHellerup.geojson', mode: 'train', day: 4, date: 'Apr 18' },
-            { file: 'day5.geojson', mode: 'bike', day: 5, date: 'Apr 20' }, 
-            { file: 'day6.geojson', mode: 'bike', day: 6, date: 'Apr 21' },
-            { file: 'day7.geojson', mode: 'bike', day: 7, date: 'Apr 22' },
-            { file: 'day8.geojson', mode: 'bike', day: 8, date: 'Apr 23' },
-            { file: 'day9.geojson', mode: 'bike', day: 9, date: 'Apr 24' },
-            { file: 'day10.geojson', mode: 'bike', day: 10, date: 'Apr 25' },
+            { file: 'day5.geojson', mode: 'bike', day: 5, date: 'Apr 20', title: '', vote: '' }, 
+            { file: 'day6.geojson', mode: 'bike', day: 6, date: 'Apr 21', title: '', vote: '' },
+            { file: 'day7.geojson', mode: 'bike', day: 7, date: 'Apr 22', title: '', vote: '' },
+            { file: 'day8.geojson', mode: 'bike', day: 8, date: 'Apr 23', title: '', vote: '' },
+            { file: 'day9.geojson', mode: 'bike', day: 9, date: 'Apr 24', title: '', vote: '' },
+            { file: 'day10.geojson', mode: 'bike', day: 10, date: 'Apr 25', title: '', vote: '' },
             { file: 'TrainToMunster.geojson', mode: 'train', day: 10, date: 'Apr 25' },
-            { file: 'day11.geojson', mode: 'bike', day: 11, date: 'Apr 28' },
-            { file: 'day12.geojson', mode: 'bike', day: 12, date: 'Apr 30' },
-            { file: 'day13.geojson', mode: 'bike', day: 13, date: 'May 01' },
-            { file: 'day14.geojson', mode: 'bike', day: 14, date: 'May 02' },
-            { file: 'daynull.geojson', mode: 'bike', day: 15, date: 'May 04' },
-            { file: 'day15.geojson', mode: 'bike', day: 16, date: 'May 05' },
-            { file: 'day16.geojson', mode: 'bike', day: 17, date: 'May 06' },
-            { file: 'day17.geojson', mode: 'bike', day: 18, date: 'May 07' },
-            { file: 'day18.geojson', mode: 'bike', day: 19, date: 'May 09' },
-            { file: 'day19.geojson', mode: 'bike', day: 20, date: 'May 10' },
-            { file: 'day20.geojson', mode: 'bike', day: 21, date: 'May 12' },
-            { file: 'day21.geojson', mode: 'bike', day: 22, date: 'May 13' },
-            { file: 'day22.geojson', mode: 'bike', day: 23, date: 'May 15' },
-            { file: 'day23.geojson', mode: 'bike', day: 24, date: 'May 16' },
-            { file: 'day24.geojson', mode: 'bike', day: 25, date: 'May 20' },
-            { file: 'day25.geojson', mode: 'bike', day: 26, date: 'May 21' },
-            { file: 'day26.geojson', mode: 'bike', day: 27, date: 'May 22' },
-            { file: 'day27.geojson', mode: 'bike', day: 28, date: 'May 23' },
-            { file: 'day28.geojson', mode: 'bike', day: 29, date: 'May 24' }
+            { file: 'day11.geojson', mode: 'bike', day: 11, date: 'Apr 28', title: '', vote: '' },
+            { file: 'day12.geojson', mode: 'bike', day: 12, date: 'Apr 30', title: '', vote: '' },
+            { file: 'day13.geojson', mode: 'bike', day: 13, date: 'May 01', title: '', vote: '' },
+            { file: 'day14.geojson', mode: 'bike', day: 14, date: 'May 02', title: '', vote: '' },
+            { file: 'daynull.geojson', mode: 'bike', day: 15, date: 'May 04', title: '', vote: '' },
+            { file: 'day15.geojson', mode: 'bike', day: 16, date: 'May 05', title: '', vote: '' },
+            { file: 'day16.geojson', mode: 'bike', day: 17, date: 'May 06', title: '', vote: '' },
+            { file: 'day17.geojson', mode: 'bike', day: 18, date: 'May 07', title: '', vote: '' },
+            { file: 'day18.geojson', mode: 'bike', day: 19, date: 'May 09', title: '', vote: '' },
+            { file: 'day19.geojson', mode: 'bike', day: 20, date: 'May 10', title: '', vote: '' },
+            { file: 'day20.geojson', mode: 'bike', day: 21, date: 'May 12', title: '', vote: '' },
+            { file: 'day21.geojson', mode: 'bike', day: 22, date: 'May 13', title: '', vote: '' },
+            { file: 'day22.geojson', mode: 'bike', day: 23, date: 'May 15', title: '', vote: '' },
+            { file: 'day23.geojson', mode: 'bike', day: 24, date: 'May 16', title: '', vote: '' },
+            { file: 'day24.geojson', mode: 'bike', day: 25, date: 'May 20', title: '', vote: '' },
+            { file: 'day25.geojson', mode: 'bike', day: 26, date: 'May 21', title: '', vote: '' },
+            { file: 'day26.geojson', mode: 'bike', day: 27, date: 'May 22', title: '', vote: '' },
+            { file: 'day27.geojson', mode: 'bike', day: 28, date: 'May 23', title: '', vote: '' },
+            { file: 'day28.geojson', mode: 'bike', day: 29, date: 'May 24', title: '', vote: '' }
         ];
 
         let bounds = L.latLngBounds();
@@ -196,7 +196,7 @@
 
                     bounds.extend(geoJsonLayer.getBounds());
 
-                    // 8. Add Start and End Circles
+                    // 8. Add Start and End Circles (Popups Removed)
                     if (data.features && data.features.length > 0) {
                         const firstFeature = data.features[0];
                         const lastFeature = data.features[data.features.length - 1];
@@ -216,8 +216,9 @@
                             fillOpacity: 1
                         };
 
-                        L.circleMarker([startCoord[1], startCoord[0]], circleStyle).addTo(map).bindPopup(`<b>Start Day ${route.day}</b>`);
-                        L.circleMarker([endCoord[1], endCoord[0]], circleStyle).addTo(map).bindPopup(`<b>End Day ${route.day}</b>`);
+                        // Bound popups removed from here
+                        L.circleMarker([startCoord[1], startCoord[0]], circleStyle).addTo(map);
+                        L.circleMarker([endCoord[1], endCoord[0]], circleStyle).addTo(map);
                     }
 
                     // Return the layer and data so we can build the popups chronologically
@@ -232,7 +233,7 @@
                 .catch(error => console.error(error));
         });
 
-        // 9. Build Popups and Calculate Cumulative Distance
+        // 9. Build Popups and Calculate Cumulative Metrics
         Promise.all(routePromises).then((results) => {
             // Remove any failed fetches before processing
             const validResults = results.filter(item => item !== undefined);
@@ -245,23 +246,46 @@
             validResults.sort((a, b) => a.route.day - b.route.day);
 
             let cumulativeDistance = 0;
+            let cumulativeAscent = 0;
+            let cumulativeDescent = 0;
 
             validResults.forEach(item => {
-                // Only add biking distances to the cumulative total
+                // Add biking stats to the cumulative totals
                 if (item.route.mode === 'bike') {
                     cumulativeDistance += item.distance;
+                    cumulativeAscent += item.ascent;
+                    cumulativeDescent += item.descent;
                 }
 
-                let popupContent = `<b>Day ${item.route.day}</b><br><small><b>Date:</b> ${item.route.date}</small>`;
+                let popupContent = `<b>Day ${item.route.day}</b>`;
+                
+                // Add Title and Vote if they exist
+                if (item.route.title) {
+                    popupContent += `<br><b>${item.route.title}</b>`;
+                }
+                if (item.route.vote) {
+                    popupContent += `<br><small><b>Vote:</b> ${item.route.vote}</small>`;
+                }
+
+                popupContent += `<br><small><b>Date:</b> ${item.route.date}</small>`;
                 popupContent += `<br><small><b>Distance:</b> ${item.distance.toFixed(1)} km</small>`;
                 
-                // Only display Ascent/Descent if the GeoJSON has 3D coordinates
+                // Only display Daily Ascent/Descent if the GeoJSON has 3D coordinates
                 if (item.ascent > 0 || item.descent > 0) {
                     popupContent += `<br><small><b>Ascent:</b> ${Math.round(item.ascent)} m</small>`;
                     popupContent += `<br><small><b>Descent:</b> ${Math.round(item.descent)} m</small>`;
                 }
                 
-                popupContent += `<br><small><b>Total distance:</b> ${cumulativeDistance.toFixed(1)} km</small>`;
+                // Divider line for cumulative stats
+                popupContent += `<hr style="margin: 6px 0; border: 0; border-top: 1px solid #ccc;">`;
+                
+                popupContent += `<small><b>Total distance:</b> ${cumulativeDistance.toFixed(1)} km</small>`;
+                
+                // Only display Cumulative Ascent/Descent if there is 3D data contributing to it
+                if (cumulativeAscent > 0 || cumulativeDescent > 0) {
+                    popupContent += `<br><small><b>Total ascent:</b> ${Math.round(cumulativeAscent)} m</small>`;
+                    popupContent += `<br><small><b>Total descent:</b> ${Math.round(cumulativeDescent)} m</small>`;
+                }
 
                 // Bind the completed popup to the line
                 item.layer.bindPopup(popupContent);
