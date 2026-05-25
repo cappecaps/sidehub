@@ -5,7 +5,7 @@ site:
   hide_footer_links: true
 ---
 
-
+Click on each route for more information.
 
 ### Legend
 Red: Bike route
