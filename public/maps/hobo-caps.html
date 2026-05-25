@@ -141,9 +141,13 @@
                         });
                     }
 
-                    const isTrain = route.mode === 'train';
-                    const routeColor = isTrain ? trainColor : bikeColor;
-                    const dashArrayStyle = isTrain ? '10, 10' : '';
+                    // Assign color based on the mode
+                    let routeColor = bikeColor;
+                    if (route.mode === 'train') routeColor = trainColor;
+                    if (route.mode === 'boat') routeColor = boatColor;
+                    
+                    // Assign dashed line for non-bike routes
+                    const dashArrayStyle = (route.mode !== 'bike') ? '10, 10' : '';
 
                     let routeDistanceMeters = 0;
                     let routeAscent = 0;
@@ -251,8 +255,8 @@
             validResults.forEach(item => {
                 let popupContent = `<b>Day ${item.route.day}</b>`;
 
-                if (item.route.mode === 'train') {
-                    // TRAIN POPUP: Only date and distance
+                if (item.route.mode === 'train' || item.route.mode === 'boat') {
+                    // TRAIN/BOAT POPUP: Only date and distance
                     popupContent += `<br><small><b>Date:</b> ${item.route.date}</small>`;
                     popupContent += `<br><small><b>Distance:</b> ${item.distance.toFixed(1)} km</small>`;
                 } else {
