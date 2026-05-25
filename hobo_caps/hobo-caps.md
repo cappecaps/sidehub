@@ -1,16 +1,17 @@
 ---
 title: Hobo Caps
-subtitle: The least insane thing someone can do after a PhD
+subtitle: The least insane thing one can do after a PhD
 site:
   hide_footer_links: true
 ---
 
-Click on each route for more information.
 
-### Legend
+**Legend**
 Red: Bike route
-Blue: Trains
+Blue: Boats
+Gray: Trains
 
+Click on each route for more information.
 
 <iframe 
     src="/sidehub/maps/hobo-caps.html"  
