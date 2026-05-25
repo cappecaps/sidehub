@@ -7,9 +7,9 @@ site:
 
 
 **Legend**
-Red: Bike route
-Blue: Boats
-Gray: Trains
+- Red: Bike route
+- Blue: Boats
+- Gray: Trains
 
 Click on each route for more information.
 
