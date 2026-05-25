@@ -56,7 +56,7 @@
 
         // 4. Colors
         const bikeColor = '#e20000'; 
-        const trainColor = '#2e2e2e'; 
+        const trainColor = '#b5b5b5'; 
         const boatColor = '#3366ff'; 
 
         // 5. Manual Routes List
@@ -106,40 +106,43 @@
                     return response.json();
                 })
                 .then(data => {
-                    // --- JUMP-CUTTER LOGIC ---
-                    const jumpThreshold = 2000; 
+                    // --- JUMP-CUTTER LOGIC (APPLIES TO BIKES ONLY) ---
+                    if (route.mode === 'bike') {
+                        const jumpThreshold = 2000; 
 
-                    const splitLine = (coords) => {
-                        let segments = [];
-                        let currentSegment = [coords[0]];
-                        for (let i = 1; i < coords.length; i++) {
-                            const p1 = L.latLng(coords[i-1][1], coords[i-1][0]);
-                            const p2 = L.latLng(coords[i][1], coords[i][0]);
-                            if (map.distance(p1, p2) > jumpThreshold) {
-                                if (currentSegment.length > 1) segments.push(currentSegment);
-                                currentSegment = [coords[i]]; 
-                            } else {
-                                currentSegment.push(coords[i]);
+                        const splitLine = (coords) => {
+                            let segments = [];
+                            let currentSegment = [coords[0]];
+                            for (let i = 1; i < coords.length; i++) {
+                                const p1 = L.latLng(coords[i-1][1], coords[i-1][0]);
+                                const p2 = L.latLng(coords[i][1], coords[i][0]);
+                                if (map.distance(p1, p2) > jumpThreshold) {
+                                    if (currentSegment.length > 1) segments.push(currentSegment);
+                                    currentSegment = [coords[i]]; 
+                                } else {
+                                    currentSegment.push(coords[i]);
+                                }
                             }
+                            if (currentSegment.length > 1) segments.push(currentSegment);
+                            return segments;
+                        };
+
+                        if (data.features) {
+                            data.features.forEach(feature => {
+                                if (feature.geometry.type === 'LineString') {
+                                    feature.geometry.coordinates = splitLine(feature.geometry.coordinates);
+                                    feature.geometry.type = 'MultiLineString';
+                                } else if (feature.geometry.type === 'MultiLineString') {
+                                    let newMulti = [];
+                                    feature.geometry.coordinates.forEach(line => {
+                                        newMulti.push(...splitLine(line));
+                                    });
+                                    feature.geometry.coordinates = newMulti;
+                                }
+                            });
                         }
-                        if (currentSegment.length > 1) segments.push(currentSegment);
-                        return segments;
-                    };
-
-                    if (data.features) {
-                        data.features.forEach(feature => {
-                            if (feature.geometry.type === 'LineString') {
-                                feature.geometry.coordinates = splitLine(feature.geometry.coordinates);
-                                feature.geometry.type = 'MultiLineString';
-                            } else if (feature.geometry.type === 'MultiLineString') {
-                                let newMulti = [];
-                                feature.geometry.coordinates.forEach(line => {
-                                    newMulti.push(...splitLine(line));
-                                });
-                                feature.geometry.coordinates = newMulti;
-                            }
-                        });
                     }
+                    // --- END JUMP-CUTTER LOGIC ---
 
                     // Assign color based on the mode
                     let routeColor = bikeColor;
